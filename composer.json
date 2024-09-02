@@ -1,0 +1,28 @@
+{
+    "name": "mikitosina1/supportchat",
+    "description": "",
+    "authors": [
+        {
+            "name": "Mykyta Zarichnyi",
+            "email": "mikitosina27@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\SupportChat\\": "/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\SupportChat\\Tests\\": "tests/"
+        }
+    }
+}

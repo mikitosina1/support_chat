@@ -1,0 +1,14 @@
+{
+	"id": "support-chat",
+	"title": "Support-chat M.Z.",
+	"name": "SupportChat",
+	"alias": "supportchat",
+	"description": "Widget Support-chat module",
+	"keywords": ["module", "support-chat", "widget", "chat"],
+	"priority": 0,
+	"providers": [
+		"Modules\\SupportChat\\App\\Providers\\SupportChatServiceProvider"
+	],
+	"files": [],
+	"version": "0.0.1"
+}
