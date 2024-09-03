@@ -1,28 +1,30 @@
 {
-    "name": "mikitosina1/supportchat",
-    "description": "",
-    "authors": [
-        {
-            "name": "Mykyta Zarichnyi",
-            "email": "mikitosina27@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [],
-            "aliases": {
+	"name": "mikitosina1/supportchat",
+	"description": "",
+	"authors": [
+		{
+			"name": "Mykyta Zarichnyi",
+			"email": "mikitosina27@gmail.com"
+		}
+	],
+	"extra": {
+		"laravel": {
+			"providers": [],
+			"aliases": {
 
-            }
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Modules\\SupportChat\\": "/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Modules\\SupportChat\\Tests\\": "tests/"
-        }
-    }
+			}
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"Modules\\SupportChat\\": "../../Modules/SupportChat",
+			"Database\\Migrations\\": "./Database/Migrations/",
+			"Database\\Seeders\\": "./Database/Seeders/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Modules\\SupportChat\\Tests\\": "tests/"
+		}
+	}
 }
