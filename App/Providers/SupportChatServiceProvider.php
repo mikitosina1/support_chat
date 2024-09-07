@@ -2,8 +2,11 @@
 
 namespace Modules\SupportChat\App\Providers;
 
+use Modules\SupportChat\App\View\Components\SupportChat;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\SupportChat\Services\SupportChatService;
 
 class SupportChatServiceProvider extends ServiceProvider
 {
@@ -13,6 +16,7 @@ class SupportChatServiceProvider extends ServiceProvider
 
 	/**
 	 * Boot the application events.
+	 * @throws BindingResolutionException
 	 */
 	public function boot(): void
 	{
@@ -22,7 +26,13 @@ class SupportChatServiceProvider extends ServiceProvider
 		$this->registerConfig();
 		$this->registerViews();
 		$this->loadMigrationsFrom(module_path($this->moduleName, 'Database/migrations'));
-		$this->loadViewsFrom(__DIR__ . '/../../resources/views', $this->moduleNameLower);
+		$this->loadViewsFrom(__DIR__.'/../../resources/views', $this->moduleNameLower);
+		Blade::component($this->moduleNameLower, SupportChat::class);
+		\View::composer('*', function ($view) {
+			if ($this->app->make(SupportChatService::class)->isModuleActive()) {
+				$view->with('renderSupportChat', true);
+			}
+		});
 	}
 
 	/**
@@ -31,6 +41,9 @@ class SupportChatServiceProvider extends ServiceProvider
 	public function register(): void
 	{
 		$this->app->register(RouteServiceProvider::class);
+		$this->app->singleton(SupportChatService::class, function ($app) {
+			return new SupportChatService();
+		});
 	}
 
 	/**
