@@ -14,6 +14,8 @@ use Modules\SupportChat\App\Http\Controllers\SupportChatController;
 |
 */
 
-Route::group([], function () {
-    Route::resource('supportchat', SupportChatController::class)->names('supportchat');
+Route::prefix('supportchat')->group(function () {
+	Route::post('/index', [SupportChatController::class, 'index'])->name('supportchat.index');
 });
+
+Route::get('/{any}', [SupportChatController::class, 'index'])->where('any', '.*');
