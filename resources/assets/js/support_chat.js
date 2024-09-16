@@ -8,14 +8,20 @@ window.$ = $;
 $(document).ready(function() {
 	console.log("Support chat online");
 
-	let closeBtn = $("#chat-header .close-btn");
+	let closeBtn = $("#chat-header");
 	let supportChat = $("#support-chat");
+	let supportChatBtn = $("#support-chat .visibility");
+	console.log(supportChatBtn);
 
 	closeBtn.on('click', function() {
 		if (supportChat.hasClass('closed')) {
 			supportChat.removeClass('closed');
+			supportChatBtn.removeClass('open-btn');
+			supportChatBtn.addClass('close-btn');
 		} else {
 			supportChat.addClass('closed');
+			supportChatBtn.addClass('open-btn');
+			supportChatBtn.removeClass('close-btn');
 		}
 	});
 });
