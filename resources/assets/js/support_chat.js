@@ -11,7 +11,6 @@ $(document).ready(function() {
 	let closeBtn = $("#chat-header");
 	let supportChat = $("#support-chat");
 	let supportChatBtn = $("#support-chat .visibility");
-	console.log(supportChatBtn);
 
 	closeBtn.on('click', function() {
 		if (supportChat.hasClass('closed')) {
