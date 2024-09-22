@@ -57,13 +57,10 @@
 	}
 
 	.open-btn {
-		width: 15px;
-		height: 15px;
-		border: none;
-		background-color: #4CAF50;
-		cursor: pointer;
-		border-radius: 50%;
-		display: inline-flex;
+		border: solid whitesmoke;
+		border-width: 0 3px 3px 0;
+		padding: 3px;
+		-webkit-transform: rotate(-135deg);
 	}
 
 	#chat-body {
