@@ -20,8 +20,6 @@ class SupportChatServiceProvider extends ServiceProvider
 	 */
 	public function boot(): void
 	{
-		$this->registerCommands();
-		$this->registerCommandSchedules();
 		$this->registerTranslations();
 		$this->registerConfig();
 		$this->registerViews();
@@ -47,25 +45,6 @@ class SupportChatServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Register commands in the format of Command::class
-	 */
-	protected function registerCommands(): void
-	{
-		// $this->commands([]);
-	}
-
-	/**
-	 * Register command Schedules.
-	 */
-	protected function registerCommandSchedules(): void
-	{
-		// $this->app->booted(function () {
-		//     $schedule = $this->app->make(Schedule::class);
-		//     $schedule->command('inspire')->hourly();
-		// });
-	}
-
-	/**
 	 * Register translations.
 	 */
 	public function registerTranslations(): void
@@ -76,8 +55,8 @@ class SupportChatServiceProvider extends ServiceProvider
 			$this->loadTranslationsFrom($langPath, $this->moduleNameLower);
 			$this->loadJsonTranslationsFrom($langPath);
 		} else {
-			$this->loadTranslationsFrom(module_path($this->moduleName, 'lang'), $this->moduleNameLower);
-			$this->loadJsonTranslationsFrom(module_path($this->moduleName, 'lang'));
+			$this->loadTranslationsFrom(module_path($this->moduleName, 'resources/lang'), $this->moduleNameLower);
+			$this->loadJsonTranslationsFrom(module_path($this->moduleName, 'resources/lang'));
 		}
 	}
 
