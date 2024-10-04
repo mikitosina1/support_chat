@@ -25,12 +25,15 @@ class SupportChatServiceProvider extends ServiceProvider
 		$this->registerViews();
 		$this->loadMigrationsFrom(module_path($this->moduleName, 'Database/migrations'));
 		$this->loadViewsFrom(__DIR__.'/../../resources/views', $this->moduleNameLower);
-		Blade::component($this->moduleNameLower, SupportChat::class);
-		\View::composer('*', function ($view) {
-			if ($this->app->make(SupportChatService::class)->isModuleActive()) {
-				$view->with('renderSupportChat', true);
-			}
-		});
+
+		if ($this->app->make(SupportChatService::class)->isModuleActive()) {
+			Blade::component($this->moduleNameLower, SupportChat::class);
+
+			\View::composer('supportchat::components.supportchat', function ($view) {
+				$supportChat = new SupportChat();
+				$view->with('supportChatAssets', $supportChat->getSupportChatAssets());
+			});
+		}
 	}
 
 	/**
