@@ -4,7 +4,12 @@
 	"name": "SupportChat",
 	"alias": "supportchat",
 	"description": "Widget Support-chat module",
-	"keywords": ["module", "support-chat", "widget", "chat"],
+	"keywords": [
+		"module",
+		"support-chat",
+		"widget",
+		"chat"
+	],
 	"priority": 0,
 	"providers": [
 		"Modules\\SupportChat\\App\\Providers\\SupportChatServiceProvider"

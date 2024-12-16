@@ -7,6 +7,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Modules\SupportChat\Services\SupportChatService;
+use View;
 
 class SupportChatServiceProvider extends ServiceProvider
 {
@@ -24,12 +25,12 @@ class SupportChatServiceProvider extends ServiceProvider
 		$this->registerConfig();
 		$this->registerViews();
 		$this->loadMigrationsFrom(module_path($this->moduleName, 'Database/migrations'));
-		$this->loadViewsFrom(__DIR__.'/../../resources/views', $this->moduleNameLower);
+		$this->loadViewsFrom(__DIR__ . '/../../resources/views', $this->moduleNameLower);
 
 		if ($this->app->make(SupportChatService::class)->isModuleActive()) {
 			Blade::component($this->moduleNameLower, SupportChat::class);
 
-			\View::composer('supportchat::components.supportchat', function ($view) {
+			View::composer('supportchat::components.supportchat', function ($view) {
 				$supportChat = new SupportChat();
 				$view->with('supportChatAssets', $supportChat->getSupportChatAssets());
 			});
@@ -52,7 +53,7 @@ class SupportChatServiceProvider extends ServiceProvider
 	 */
 	public function registerTranslations(): void
 	{
-		$langPath = resource_path('lang/'.$this->moduleNameLower);
+		$langPath = resource_path('lang/' . $this->moduleNameLower);
 
 		if (is_dir($langPath)) {
 			$this->loadTranslationsFrom($langPath, $this->moduleNameLower);
@@ -68,7 +69,7 @@ class SupportChatServiceProvider extends ServiceProvider
 	 */
 	protected function registerConfig(): void
 	{
-		$this->publishes([module_path($this->moduleName, 'config/config.php') => config_path($this->moduleNameLower.'.php')], 'config');
+		$this->publishes([module_path($this->moduleName, 'config/config.php') => config_path($this->moduleNameLower . '.php')], 'config');
 		$this->mergeConfigFrom(module_path($this->moduleName, 'config/config.php'), $this->moduleNameLower);
 	}
 
@@ -77,14 +78,14 @@ class SupportChatServiceProvider extends ServiceProvider
 	 */
 	public function registerViews(): void
 	{
-		$viewPath = resource_path('views/modules'.$this->moduleNameLower);
+		$viewPath = resource_path('views/modules' . $this->moduleNameLower);
 		$sourcePath = module_path($this->moduleName, 'resources/views');
 
-		$this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower.'-module-views']);
+		$this->publishes([$sourcePath => $viewPath], ['views', $this->moduleNameLower . '-module-views']);
 
 		$this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
 
-		$componentNamespace = str_replace('/', '\\', config('modules.namespace').'\\'.$this->moduleName.'\\'.config('modules.paths.generator.component-class.path'));
+		$componentNamespace = str_replace('/', '\\', config('modules.namespace') . '\\' . $this->moduleName . '\\' . config('modules.paths.generator.component-class.path'));
 		Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
 	}
 
@@ -100,8 +101,8 @@ class SupportChatServiceProvider extends ServiceProvider
 	{
 		$paths = [];
 		foreach (config('view.paths') as $path) {
-			if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
-				$paths[] = $path.'/modules/'.$this->moduleNameLower;
+			if (is_dir($path . '/modules/' . $this->moduleNameLower)) {
+				$paths[] = $path . '/modules/' . $this->moduleNameLower;
 			}
 		}
 

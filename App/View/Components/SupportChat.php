@@ -2,12 +2,17 @@
 
 namespace Modules\SupportChat\App\View\Components;
 
+use Closure;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Nwidart\Modules\Module;
 
 class SupportChat extends Component
 {
-	public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Support\Htmlable|\Closure|string|\Illuminate\Contracts\Foundation\Application
+	public function render(): Factory|\Illuminate\Foundation\Application|View|Htmlable|Closure|string|Application
 	{
 		return view('supportchat::components.supportchat', $this->getSupportChatAssets());
 	}

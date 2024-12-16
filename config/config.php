@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'name' => 'SupportChat',
+	'name' => 'SupportChat',
 ];

@@ -6,11 +6,11 @@ use Illuminate\Database\Seeder;
 
 class SupportChatDatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        // $this->call([]);
-    }
+	/**
+	 * Run the database seeds.
+	 */
+	public function run(): void
+	{
+		// $this->call([]);
+	}
 }

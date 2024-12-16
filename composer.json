@@ -7,7 +7,13 @@
 			"email": "mikitosina27@gmail.com"
 		}
 	],
-	"keywords": ["laravel", "module", "support chat", "mikitosina1", "SupportChat"],
+	"keywords": [
+		"laravel",
+		"module",
+		"support chat",
+		"mikitosina1",
+		"SupportChat"
+	],
 	"extra": {
 		"laravel": {
 			"providers": [],

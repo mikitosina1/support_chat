@@ -3,6 +3,9 @@
 namespace Modules\SupportChat\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\SupportChat\Services\SupportChatService;
@@ -19,7 +22,7 @@ class SupportChatController extends Controller
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+	public function index(): Factory|\Illuminate\Foundation\Application|View|Application
 	{
 		$isActive = $this->supportChatService->isModuleActive();
 		return view('supportchat::support_chat', compact('isActive'));
@@ -28,7 +31,7 @@ class SupportChatController extends Controller
 	/**
 	 * Show the form for creating a new resource.
 	 */
-	public function create(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+	public function create(): View|\Illuminate\Foundation\Application|Factory|Application
 	{
 		return view('supportchat::create');
 	}
@@ -44,7 +47,7 @@ class SupportChatController extends Controller
 	/**
 	 * Show the specified resource.
 	 */
-	public function show($id): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+	public function show($id): Factory|\Illuminate\Foundation\Application|View|Application
 	{
 		return view('supportchat::show');
 	}
@@ -52,7 +55,7 @@ class SupportChatController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 */
-	public function edit($id): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+	public function edit($id): View|\Illuminate\Foundation\Application|Factory|Application
 	{
 		return view('supportchat::edit');
 	}
