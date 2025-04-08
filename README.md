@@ -1,10 +1,12 @@
 ## Support-chat by <span style="color:#008066;">@mikitosina1</span>
 
-#### Support-chat for Laravel 10<br><hr>
+#### Laravel Support-chat for Laravel 10<br><hr>
 
+* Ensure, that you have `nwidart/laravel-modules` and `beyondcode/laravel-websockets` or install them before setting up
+	module.
 * add to **resources/views/app.blade.php**  in body:
 
-```
+```php
 @if(Module::isEnabled('SupportChat'))
 	<?php echo app()->view->make('supportchat::components.supportchat')->render(); ?>
 @endif
@@ -14,16 +16,16 @@
 * change/create file in root of project 'vite.config.js'
 
 ```js
-	const allPaths = await collectModuleAssetsPaths(paths, 'Modules');
+const allPaths = await collectModuleAssetsPaths(paths, 'Modules');
 
-	return defineConfig({
-		plugins: [
-			laravel({
-				input: allPaths,
-				refresh: true,
-			})
-		]
-	});
+return defineConfig({
+	plugins: [
+		laravel({
+			input: allPaths,
+			refresh: true,
+		})
+	]
+});
 ``` 
 
 ## Full root vite.config.js example:
