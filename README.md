@@ -4,6 +4,9 @@
 
 * Ensure, that you have `nwidart/laravel-modules` and `beyondcode/laravel-websockets` or install them before setting up
 	module.
+* run `make ws-init` and `make ws-start` or if you haven't 'make' package:
+* * move to file Modules/SupportChat/Makefile
+* * run manually subcommands (look upper)
 * add to **resources/views/app.blade.php**  in body:
 
 ```php
