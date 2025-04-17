@@ -1,17 +1,5 @@
 import axios from 'axios';
 import $ from 'jquery';
-import Echo from 'laravel-echo';
-
-window.Pusher = require('pusher-js');
-
-window.Echo = new Echo({
-	broadcaster: 'pusher',
-	key: 'AAaAglMZVbyyy7u206',
-	wsHost: window.location.hostname,
-	wsPort: 6001,
-	forceTLS: false,
-	disableStats: true,
-});
 
 
 window.axios = axios;
