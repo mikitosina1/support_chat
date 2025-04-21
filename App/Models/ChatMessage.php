@@ -23,6 +23,7 @@ class ChatMessage extends Model
 	protected $casts = [
 		'status' => 'string'
 	];
+	private mixed $chat_room_id;
 
 	public function chatRoom(): BelongsTo
 	{
@@ -34,7 +35,7 @@ class ChatMessage extends Model
 		return $this->belongsTo(User::class);
 	}
 
-	public function broadcastOn()
+	public function broadcastOn(): PrivateChannel
 	{
 		return new PrivateChannel('chat.room.' . $this->chat_room_id);
 	}

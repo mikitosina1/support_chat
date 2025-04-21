@@ -22,21 +22,63 @@ $(document).ready(function () {
 		disableStats: true,
 	});
 
-	let closeBtn = $("#chat-header");
+	let closeBtn = $("#chat-header .open-btn");
 	let supportChat = $("#support-chat");
 	let supportChatBtn = $("#support-chat .visibility");
+	let expandBtn = $("#support-chat .toggle-fullscreen");
 
 	closeBtn.on('click', function () {
 		if (supportChat.hasClass('closed')) {
 			supportChat.removeClass('closed');
 			supportChatBtn.removeClass('open-btn');
 			supportChatBtn.addClass('close-btn');
+			expandBtn.removeClass('hidden');
 		} else {
 			supportChat.addClass('closed');
+			supportChat.removeClass('fullscreen');
 			supportChatBtn.addClass('open-btn');
 			supportChatBtn.removeClass('close-btn');
+			expandBtn.addClass('hidden');
+		}
+	});
+
+	expandBtn.on('click', function () {
+		supportChat.toggleClass('fullscreen');
+
+		if (supportChat.hasClass('fullscreen')) {
+			expandBtn.text('🗕');
+		} else {
+			expandBtn.text('⛶');
 		}
 	});
 
 	console.log("Support chat online");
+
+	$('#send-btn').on('click', function () {
+		const input = $('#chat-input');
+		const message = input.val().trim();
+		if (message) {
+			addMessage(message, 'user');
+			input.val('');
+
+			setTimeout(() => {
+				addMessage('Thanks for answer, we will answer so fast as we can!', 'support');
+			}, 1000);
+		}
+	});
+
 });
+
+function addMessage(content, from = 'user') {
+	const chatBody = $('#chat-body');
+	const message = $('<div>', {
+		class: `chat-message ${from}-message`,
+	}).append(
+		$('<div>', {
+			class: 'message-bubble',
+			text: content,
+		})
+	);
+	chatBody.append(message);
+	chatBody.scrollTop(chatBody[0].scrollHeight); // auto rolling
+}
