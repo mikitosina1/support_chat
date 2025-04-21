@@ -39,6 +39,7 @@ $(document).ready(function () {
 			supportChatBtn.addClass('open-btn');
 			supportChatBtn.removeClass('close-btn');
 			expandBtn.addClass('hidden');
+			expandBtn.text('⛶');
 		}
 	});
 
