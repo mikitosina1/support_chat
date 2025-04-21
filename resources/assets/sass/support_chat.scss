@@ -28,8 +28,10 @@
 		height: 100vh;
 		right: 0;
 		bottom: 0;
-		border-radius: 0;
 		z-index: 9999;
+		border-radius: 10px;
+		padding: 1.5em;
+		border: 1px solid gray;
 
 		#chat-header {
 			height: 10%;
@@ -42,6 +44,14 @@
 		#chat-footer {
 			height: 15%;
 			width: 100%;
+
+			#chat-input {
+				width: 85%;
+			}
+
+			#send-btn {
+				width: 15%;
+			}
 		}
 	}
 
