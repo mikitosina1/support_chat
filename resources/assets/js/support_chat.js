@@ -10,17 +10,17 @@ window.$ = $;
 
 $(document).ready(function () {
 
-	window.Echo = new Echo({
-		broadcaster: 'pusher',
-		key: 'local',
-		wsHost: 'ws.ddev.site',
-		cluster: 'mt1',
-		wsPort: 6001,
-		wssPort: 6001,
-		forceTLS: false,
-		encrypted: false,
-		disableStats: true,
-	});
+	// window.Echo = new Echo({
+	// 	broadcaster: 'pusher',
+	// 	key: 'local',
+	// 	wsHost: 'ws.ddev.site',
+	// 	cluster: 'mt1',
+	// 	wsPort: 6001,
+	// 	wssPort: 6001,
+	// 	forceTLS: false,
+	// 	encrypted: false,
+	// 	disableStats: true,
+	// });
 
 	let closeBtn = $("#chat-header .open-btn");
 	let supportChat = $("#support-chat");
