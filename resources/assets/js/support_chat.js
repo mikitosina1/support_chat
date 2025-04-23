@@ -22,24 +22,28 @@ $(document).ready(function () {
 	// 	disableStats: true,
 	// });
 
-	let closeBtn = $("#chat-header .open-btn");
-	let supportChat = $("#support-chat");
-	let supportChatBtn = $("#support-chat .visibility");
-	let expandBtn = $("#support-chat .toggle-fullscreen");
+	const closeBtn = $("#chat-header .open-btn");
+	const supportChat = $("#support-chat");
+	const supportChatBtn = $("#support-chat .visibility");
+	const expandBtn = $("#support-chat .toggle-fullscreen");
+	const iconUp = $(".visibility .icon-up");
+	const iconClose = $(".visibility .icon-close");
 
 	closeBtn.on('click', function () {
 		if (supportChat.hasClass('closed')) {
 			supportChat.removeClass('closed');
 			supportChatBtn.removeClass('open-btn');
-			supportChatBtn.addClass('close-btn');
 			expandBtn.removeClass('hidden');
+			iconUp.addClass('hidden');
+			iconClose.removeClass('hidden');
 		} else {
 			supportChat.addClass('closed');
 			supportChat.removeClass('fullscreen');
 			supportChatBtn.addClass('open-btn');
-			supportChatBtn.removeClass('close-btn');
 			expandBtn.addClass('hidden');
 			expandBtn.text('⛶');
+			iconUp.removeClass('hidden');
+			iconClose.addClass('hidden');
 		}
 	});
 

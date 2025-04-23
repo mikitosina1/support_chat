@@ -63,7 +63,6 @@
 		align-content: center;
 		justify-content: space-between;
 		align-items: center;
-		cursor: pointer;
 
 		.chat-controls {
 			display: flex;
@@ -78,16 +77,6 @@
 				cursor: pointer;
 			}
 		}
-	}
-
-	.close-btn {
-		width: 30px;
-		height: 30px;
-		border: none;
-		background: transparent;
-		cursor: pointer;
-		position: relative;
-		display: block;
 	}
 
 	.close-btn::before, .close-btn::after {
@@ -106,10 +95,13 @@
 	}
 
 	.open-btn {
-		border: solid whitesmoke;
-		border-width: 0 3px 3px 0;
-		padding: 3px;
-		-webkit-transform: rotate(-135deg);
+		display: flex;
+		flex-direction: row;
+		height: 2.5em;
+		width: 3.5em;
+		align-items: center;
+		justify-content: flex-end;
+		cursor: pointer;
 	}
 
 	#chat-body {
