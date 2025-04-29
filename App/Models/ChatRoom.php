@@ -32,7 +32,7 @@ class ChatRoom extends Model
 
 	/**
 	 * creates a new chat room
-	 * @param $data
+	 * @param array $data
 	 * @return JsonResponse
 	 */
 	public function create(array $data): JsonResponse

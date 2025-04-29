@@ -8,6 +8,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\SupportChat\App\Events\NewMessage;
+use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\Services\SupportChatService;
 
 class SupportChatController extends Controller
@@ -90,5 +93,54 @@ class SupportChatController extends Controller
 			'status' => 'ok',
 			'message' => $message,
 		]);
+	}
+
+	public function createRoom(Request $request): JsonResponse
+	{
+		$room = ChatRoom::create([
+			'name' => $request->input('name'),
+			'status' => 'open'
+		]);
+
+		// Add the creator to the room
+		$room->users()->attach(Auth::id());
+
+		return response()->json($room);
+	}
+
+	public function sendMessage(Request $request, ChatRoom $room): JsonResponse
+	{
+		$message = $room->messages()->create([
+			'user_id' => Auth::id(),
+			'message' => $request->input('message'),
+			'status' => 'sent'
+		]);
+
+		// Broadcast the message
+		broadcast(new NewMessage($message))->toOthers();
+
+		return response()->json($message);
+	}
+
+	public function getMessages(ChatRoom $room): JsonResponse
+	{
+		$messages = $room->messages()
+			->with('user')
+			->orderBy('created_at', 'asc')
+			->get();
+
+		return response()->json($messages);
+	}
+
+	public function joinRoom(ChatRoom $room): JsonResponse
+	{
+		$room->users()->attach(Auth::id());
+		return response()->json(['status' => 'success']);
+	}
+
+	public function leaveRoom(ChatRoom $room): JsonResponse
+	{
+		$room->users()->detach(Auth::id());
+		return response()->json(['status' => 'success']);
 	}
 }

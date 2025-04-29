@@ -18,11 +18,15 @@
 		</div>
 	</div>
 	<div id="chat-body">
-		<div class="chat-message user-message">
-			<div class="message-bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-		</div>
 		<div class="chat-message support-message">
-			<div class="message-bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+			<div class="message-bubble">
+				<div class="create-support-chat">
+					<form action="{{ route('supportchat.create') }}" method="POST">
+						@csrf
+						<input type="text" placeholder="@lang('supportchat::chat_lang.s_chat')">
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="chat-footer">
