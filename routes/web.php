@@ -4,5 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Modules\SupportChat\App\Http\Controllers\SupportChatController;
 
 Route::prefix('supportchat')->group(function () {
-//	Route::post('/index', [SupportChatController::class, 'index'])->name('supportchat.index');
+	Route::get('/messages', [SupportChatController::class, 'messages'])->name('supportchat.messages');
+	Route::post('/send', [SupportChatController::class, 'send'])->name('supportchat.send');
 });

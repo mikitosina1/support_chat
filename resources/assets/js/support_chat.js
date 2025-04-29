@@ -2,6 +2,7 @@ import axios from 'axios';
 import $ from 'jquery';
 import Echo from 'laravel-echo';
 import Pusher from "pusher-js";
+
 window.Pusher = Pusher;
 
 window.axios = axios;
@@ -10,17 +11,23 @@ window.$ = $;
 
 $(document).ready(function () {
 
-	// window.Echo = new Echo({
-	// 	broadcaster: 'pusher',
-	// 	key: 'local',
-	// 	wsHost: 'ws.ddev.site',
-	// 	cluster: 'mt1',
-	// 	wsPort: 6001,
-	// 	wssPort: 6001,
-	// 	forceTLS: false,
-	// 	encrypted: false,
-	// 	disableStats: true,
-	// });
+	window.Echo = new Echo({
+		broadcaster: 'pusher',
+		key: 'local',
+		wsHost: 'ws.ddev.site',
+		cluster: 'mt1',
+		wsPort: 6001,
+		wssPort: 6001,
+		forceTLS: false,
+		encrypted: false,
+		disableStats: true,
+	});
+
+	window.Echo.private('chat.1')
+		.listen('.new.message', (e) => {
+			console.log("Получено сообщение:", e.message);
+			addMessage(e.message, 'support');
+		});
 
 	const closeBtn = $("#chat-header .open-btn");
 	const supportChat = $("#support-chat");

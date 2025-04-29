@@ -12,6 +12,7 @@ ws-init: ## before running websocket server must to run utilitarian commands
 
 ws-start: ## websocket server start
 	php artisan websockets:serve
+	php artisan queue:work
 
 ddev-ws-init: ## before running websocket server must to run utilitarian commands
 	ddev exec php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"

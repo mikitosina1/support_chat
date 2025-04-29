@@ -2,12 +2,12 @@
 
 namespace Modules\SupportChat\App\Providers;
 
-use Modules\SupportChat\App\View\Components\SupportChat;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Modules\SupportChat\App\View\Components\SupportChat;
 use Modules\SupportChat\Services\SupportChatService;
-use View;
 
 class SupportChatServiceProvider extends ServiceProvider
 {

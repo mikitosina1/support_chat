@@ -3,11 +3,9 @@
 namespace Modules\SupportChat\App\Models;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\Channel;
 
 class ChatMessage extends Model
 {
@@ -33,10 +31,5 @@ class ChatMessage extends Model
 	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
-	}
-
-	public function broadcastOn(): PrivateChannel
-	{
-		return new PrivateChannel('chat.room.' . $this->chat_room_id);
 	}
 }

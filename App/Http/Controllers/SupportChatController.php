@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\SupportChat\Services\SupportChatService;
 
@@ -39,10 +39,10 @@ class SupportChatController extends Controller
 	/**
 	 * Store a newly created resource in storage.
 	 */
-	public function store(Request $request): RedirectResponse
-	{
-		//
-	}
+//	public function store(Request $request): RedirectResponse
+//	{
+//		//
+//	}
 
 	/**
 	 * Show the specified resource.
@@ -63,10 +63,10 @@ class SupportChatController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(Request $request, $id): RedirectResponse
-	{
-		//
-	}
+//	public function update(Request $request, $id): RedirectResponse
+//	{
+//		//
+//	}
 
 	/**
 	 * Remove the specified resource from storage.
@@ -74,5 +74,21 @@ class SupportChatController extends Controller
 	public function destroy($id)
 	{
 		//
+	}
+
+	public function send(Request $request): JsonResponse
+	{
+		$validated = $request->validate([
+			'message' => 'required|string|max:1000',
+		]);
+
+		$message = $validated['message'];
+
+		// TODO: use websocket later
+
+		return response()->json([
+			'status' => 'ok',
+			'message' => $message,
+		]);
 	}
 }
