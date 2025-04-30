@@ -33,12 +33,21 @@ class ChatRoom extends Model
 	/**
 	 * creates a new chat room
 	 * @param array $data
-	 * @return JsonResponse
+	 * @return ChatRoom
 	 */
-	public function create(array $data): JsonResponse
+	public function create(array $data): ChatRoom
 	{
-		$response = ['success' => true];
+		// Create the chat room
+		$room = new self();
+		$room->name = $data['name'];
+		$room->status = $data['status'] ?? 'open';
+		$room->save();
 
-		return response()->json($response);
+		// Associate the current user with the room
+		if (auth()->check()) {
+			$room->users()->attach(auth()->id());
+		}
+
+		return $room;
 	}
 }

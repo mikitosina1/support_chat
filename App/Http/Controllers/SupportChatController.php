@@ -34,9 +34,27 @@ class SupportChatController extends Controller
 	/**
 	 * Show the form for creating a new resource.
 	 */
-	public function create(): View|\Illuminate\Foundation\Application|Factory|Application
+	public function create(Request $request): JsonResponse|View|\Illuminate\Foundation\Application|Factory|Application
 	{
-		return view('supportchat::create');
+		if ($request->ajax()) {
+			$validated = $request->validate([
+				'email' => 'required|email'
+			]);
+
+			// Create a new chat room
+			$room = (new ChatRoom())->create([
+				'name' => 'Support Chat - ' . $validated['email'],
+				'status' => 'open'
+			]);
+
+			return response()->json([
+				'status' => 'success',
+				'message' => 'Chat room created successfully',
+				'room' => $room
+			]);
+		}
+
+		return view('supportchat::support_chat');
 	}
 
 	/**
@@ -97,7 +115,8 @@ class SupportChatController extends Controller
 
 	public function createRoom(Request $request): JsonResponse
 	{
-		$room = ChatRoom::create([
+		$room = new ChatRoom();
+		$room->create([
 			'name' => $request->input('name'),
 			'status' => 'open'
 		]);

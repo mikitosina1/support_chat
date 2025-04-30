@@ -1,6 +1,6 @@
 import axios from 'axios';
 import $ from 'jquery';
-import Echo from 'laravel-echo';
+// import Echo from 'laravel-echo';
 import Pusher from "pusher-js";
 
 window.Pusher = Pusher;
@@ -71,6 +71,47 @@ $(document).ready(function () {
 				addMessage('Thanks for answer, we will answer so fast as we can!', 'support');
 			}, 1000);
 		}
+	});
+
+	// Handle support chat form submission
+	$('form.supportchat-create').on('submit', function(e) {
+		e.preventDefault();
+
+		const form = $(this);
+		const email = form.find('input[name="email"]').val();
+
+		$.ajax({
+			url: form.attr('action'),
+			method: 'POST',
+			data: {
+				email: email,
+				_token: $('meta[name="csrf-token"]').attr('content')
+			},
+			success: function(response) {
+				// Clear the form
+				form.find('input[name="email"]').val('');
+
+				// Show a success message
+				addMessage(response.message, 'support');
+
+				// Hide the email form and show the chat interface
+				$('.create-support-chat').hide();
+				$('#chat-input').show();
+				$('#send-btn').show();
+			},
+			error: function(xhr) {
+				// Handle validation errors
+				if (xhr.responseJSON && xhr.responseJSON.errors) {
+					const errors = xhr.responseJSON.errors;
+					Object.keys(errors).forEach(key => {
+						addMessage(errors[key][0], 'support');
+					});
+				} else {
+					addMessage('Error creating chat room. Please try again.', 'support');
+					console.error('Error:', xhr.responseText);
+				}
+			}
+		});
 	});
 
 });
