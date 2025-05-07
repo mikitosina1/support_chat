@@ -1,6 +1,6 @@
 import axios from 'axios';
 import $ from 'jquery';
-// import Echo from 'laravel-echo';
+import Echo from 'laravel-echo';
 import Pusher from "pusher-js";
 
 window.Pusher = Pusher;
@@ -22,6 +22,17 @@ $(document).ready(function () {
 	// 	encrypted: false,
 	// 	disableStats: true,
 	// });
+	//
+	// const roomId = $("#support-chat").data('room-id');
+	//
+	// window.Echo.private(`chat.room.${roomId}`)
+	// .listen('.new.message', (e) => {
+	// 	// Добавляем сообщение в UI
+	// 	const message = e.message;
+	// 	const from = message.user_id === userId ? 'user' : 'support';
+	// 	addMessage(message.message, from);
+	// });
+
 
 	const closeBtn = $("#chat-header .open-btn");
 	const supportChat = $("#support-chat");
@@ -29,6 +40,38 @@ $(document).ready(function () {
 	const expandBtn = $("#support-chat .toggle-fullscreen");
 	const iconUp = $(".visibility .icon-up");
 	const iconClose = $(".visibility .icon-close");
+
+	$.ajax({
+		url: '/api/v1/chat/room',
+		method: 'GET',
+		success: function(response) {
+			if (response.success && response.room) {
+				supportChat.data('room-id', response.room.id);
+				loadChatHistory(response.room.id);
+			}
+		},
+		error: function(xhr) {
+			console.error('Ошибка получения комнаты чата:', xhr.responseText);
+		}
+	});
+
+	function loadChatHistory(roomId) {
+		$.ajax({
+			url: `/api/v1/chat/rooms/${roomId}/messages`,
+			method: 'GET',
+			success: function(response) {
+				if (response.success && response.messages) {
+					$('#chat-body').empty();
+
+					response.messages.forEach(function(message) {
+						const from = message.user_id ? 'user' : 'support';
+						addMessage(message.message, from);
+					});
+				}
+			}
+		});
+	}
+
 
 	closeBtn.on('click', function () {
 		if (supportChat.hasClass('closed')) {
@@ -63,9 +106,30 @@ $(document).ready(function () {
 	$('#send-btn').on('click', function () {
 		const input = $('#chat-input');
 		const message = input.val().trim();
+		const roomId = $("#support-chat").data('room-id') || 1;
+		const csrfToken = $('meta[name="csrf-token"]').attr('content');
 		if (message) {
 			addMessage(message, 'user');
 			input.val('');
+			$.ajax({
+				url: `/api/v1/chat/rooms/${roomId}/messages`,
+				method: 'POST',
+				data: {
+					message: message,
+					_token: csrfToken
+				},
+				headers: {
+					'X-CSRF-TOKEN': csrfToken
+				},
+				success: function(response) {
+					console.log('Message successfully sent.', response);
+				},
+				error: function(xhr) {
+					console.error('Something went wrong:', xhr.responseText);
+					addMessage('Something went wrong. Try again.', 'support');
+				}
+			});
+
 
 			setTimeout(() => {
 				addMessage('Thanks for answer, we will answer so fast as we can!', 'support');

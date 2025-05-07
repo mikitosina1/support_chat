@@ -1,7 +1,7 @@
 @foreach ($supportChatAssets as $asset)
 	@vite($asset)
 @endforeach
-<div id="support-chat" class="dark:bg-gray-800 closed">
+<div id="support-chat" class="dark:bg-gray-800 closed"  data-room-id="">
 	<div id="chat-header" class="dark:text-gray-300">
 		<div>@lang('supportchat::chat_lang.s_chat')</div>
 		<div class="chat-controls">
@@ -22,15 +22,15 @@
 			<div class="message-bubble">
 				<div class="create-support-chat">
 					@lang('supportchat::chat_lang.required_email')
-					<form class="supportchat-create" action="{{ route('supportchat.create') }}" method="POST">
-						@csrf
-						<input class="email" type="email" name="email" placeholder="example@mail.com">
-						<button type="submit" class="text-gray-800 personalized">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-								<path d="M19 3h-2v6H5.83L9.41 5.41 8 4l-6 6 6 6 1.41-1.41L5.83 11H19z"/>
-							</svg>
-						</button>
-					</form>
+{{--					<form class="supportchat-create" action="{{ route('supportchat.create') }}" method="POST">--}}
+{{--						@csrf--}}
+{{--						<input class="email" type="email" name="email" placeholder="example@mail.com">--}}
+{{--						<button type="submit" class="text-gray-800 personalized">--}}
+{{--							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">--}}
+{{--								<path d="M19 3h-2v6H5.83L9.41 5.41 8 4l-6 6 6 6 1.41-1.41L5.83 11H19z"/>--}}
+{{--							</svg>--}}
+{{--						</button>--}}
+{{--					</form>--}}
 				</div>
 			</div>
 		</div>

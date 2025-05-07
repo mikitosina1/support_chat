@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Modules\SupportChat\App\Events\NewMessage;
+use Modules\SupportChat\App\Models\ChatMessage;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\Services\SupportChatService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
 
 class SupportChatController extends Controller
 {
@@ -31,135 +32,115 @@ class SupportChatController extends Controller
 		return view('supportchat::support_chat', compact('isActive'));
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 */
-	public function create(Request $request): JsonResponse|View|\Illuminate\Foundation\Application|Factory|Application
-	{
-		if ($request->ajax()) {
-			$validated = $request->validate([
-				'email' => 'required|email'
-			]);
-
-			// Create a new chat room
-			$room = (new ChatRoom())->create([
-				'name' => 'Support Chat - ' . $validated['email'],
-				'status' => 'open'
-			]);
-
-			return response()->json([
-				'status' => 'success',
-				'message' => 'Chat room created successfully',
-				'room' => $room
-			]);
-		}
-
-		return view('supportchat::support_chat');
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 */
-//	public function store(Request $request): RedirectResponse
-//	{
-//		//
-//	}
-
-	/**
-	 * Show the specified resource.
-	 */
-	public function show($id): Factory|\Illuminate\Foundation\Application|View|Application
-	{
-		return view('supportchat::show');
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 */
-	public function edit($id): View|\Illuminate\Foundation\Application|Factory|Application
-	{
-		return view('supportchat::edit');
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 */
-//	public function update(Request $request, $id): RedirectResponse
-//	{
-//		//
-//	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
-	public function send(Request $request): JsonResponse
-	{
-		$validated = $request->validate([
-			'message' => 'required|string|max:1000',
-		]);
-
-		$message = $validated['message'];
-
-		// TODO: use websocket later
-
-		return response()->json([
-			'status' => 'ok',
-			'message' => $message,
-		]);
-	}
-
 	public function createRoom(Request $request): JsonResponse
 	{
+		$request->validate([
+			'name' => 'required|string|max:255',
+		]);
+
 		$room = new ChatRoom();
-		$room->create([
-			'name' => $request->input('name'),
+		$room = $room->create([
+			'name' => $request->name,
 			'status' => 'open'
 		]);
 
-		// Add the creator to the room
-		$room->users()->attach(Auth::id());
-
-		return response()->json($room);
-	}
-
-	public function sendMessage(Request $request, ChatRoom $room): JsonResponse
-	{
-		$message = $room->messages()->create([
-			'user_id' => Auth::id(),
-			'message' => $request->input('message'),
-			'status' => 'sent'
+		return response()->json([
+			'success' => true,
+			'room' => $room
 		]);
-
-		// Broadcast the message
-		broadcast(new NewMessage($message))->toOthers();
-
-		return response()->json($message);
-	}
-
-	public function getMessages(ChatRoom $room): JsonResponse
-	{
-		$messages = $room->messages()
-			->with('user')
-			->orderBy('created_at', 'asc')
-			->get();
-
-		return response()->json($messages);
 	}
 
 	public function joinRoom(ChatRoom $room): JsonResponse
 	{
-		$room->users()->attach(Auth::id());
-		return response()->json(['status' => 'success']);
+		if (auth()->check()) {
+			$room->users()->attach(auth()->id());
+		}
+
+		return response()->json([
+			'success' => true
+		]);
 	}
 
 	public function leaveRoom(ChatRoom $room): JsonResponse
 	{
-		$room->users()->detach(Auth::id());
-		return response()->json(['status' => 'success']);
+		if (auth()->check()) {
+			$room->users()->detach(auth()->id());
+		}
+
+		return response()->json([
+			'success' => true
+		]);
 	}
+
+	public function sendMessage(Request $request, ChatRoom $room): JsonResponse
+	{
+		$request->validate([
+			'message' => 'required|string'
+		]);
+
+		$message = new ChatMessage();
+		$message->chat_room_id = $room->id;
+		$message->user_id = auth()->id() ?? null;
+		$message->message = $request->message;
+		$message->status = 'sent';
+		$message->save();
+
+		broadcast(new NewMessage($message))->toOthers();
+
+		return response()->json([
+			'success' => true,
+			'message' => $message
+		]);
+	}
+
+	public function getMessages(ChatRoom $room): JsonResponse
+	{
+		$messages = $room->messages()->with('user')->latest()->take(50)->get()->reverse();
+
+		return response()->json([
+			'success' => true,
+			'messages' => $messages
+		]);
+	}
+
+	public function getOrCreateRoom(Request $request): JsonResponse
+	{
+		// for authorized
+		if (auth()->check()) {
+			$room = ChatRoom::whereHas('users', function($query) {
+				$query->where('user_id', auth()->id());
+			})->first();
+
+			if (!$room) {
+				$room = new ChatRoom();
+				$room = $room->create([
+					'name' => 'Support chat #' . auth()->id(),
+					'status' => 'open'
+				]);
+			}
+
+			return response()->json([
+				'success' => true,
+				'room' => $room
+			]);
+		}
+
+		// for unauthorized users
+		$sessionId = $request->session()->getId();
+		$room = ChatRoom::where('name', 'Guest Chat ' . $sessionId)->first();
+
+		if (!$room) {
+			$room = new ChatRoom();
+			$room = $room->create([
+				'name' => 'Guest Chat ' . $sessionId,
+				'status' => 'open'
+			]);
+		}
+
+		return response()->json([
+			'success' => true,
+			'room' => $room
+		]);
+	}
+
 }
