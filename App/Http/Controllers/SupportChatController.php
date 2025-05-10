@@ -80,22 +80,29 @@ class SupportChatController extends Controller
 
 		$message = new ChatMessage();
 		$message->chat_room_id = $room->id;
-		$message->user_id = auth()->id() ?? null;
+		$message->user_id = auth()->id();
 		$message->message = $request->message;
 		$message->status = 'sent';
 		$message->save();
 
-		broadcast(new NewMessage($message))->toOthers();
+//		broadcast(new NewMessage($message))->toOthers();
 
 		return response()->json([
 			'success' => true,
-			'message' => $message
+			'message' => $message,
+			'room_id' => $room->id
 		]);
 	}
 
 	public function getMessages(ChatRoom $room): JsonResponse
 	{
-		$messages = $room->messages()->with('user')->latest()->take(50)->get()->reverse();
+		$messages = $room->messages()
+			->with('user')
+			->latest()
+			->take(50)
+			->get()
+			->reverse()
+			->values();
 
 		return response()->json([
 			'success' => true,

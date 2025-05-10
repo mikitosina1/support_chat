@@ -1,6 +1,6 @@
 import axios from 'axios';
 import $ from 'jquery';
-import Echo from 'laravel-echo';
+// import Echo from 'laravel-echo';
 import Pusher from "pusher-js";
 
 window.Pusher = Pusher;
@@ -8,6 +8,9 @@ window.Pusher = Pusher;
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.$ = $;
+window.axios.defaults.withCredentials = true;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 
 $(document).ready(function () {
 
@@ -33,6 +36,9 @@ $(document).ready(function () {
 	// 	addMessage(message.message, from);
 	// });
 
+	const token = $('meta[name="csrf-token"]').attr('content');
+	const chatToken = $('meta[name="chat-token"]').attr('content');
+	console.log("AAAAA: ", token, "\n BBBB: ", chatToken);
 
 	const closeBtn = $("#chat-header .open-btn");
 	const supportChat = $("#support-chat");
@@ -41,37 +47,20 @@ $(document).ready(function () {
 	const iconUp = $(".visibility .icon-up");
 	const iconClose = $(".visibility .icon-close");
 
+	// Initialize room ID
 	$.ajax({
 		url: '/api/v1/chat/room',
 		method: 'GET',
+		headers: {
+			'Authorization': `Bearer ${chatToken}`
+		},
 		success: function(response) {
 			if (response.success && response.room) {
-				supportChat.data('room-id', response.room.id);
-				loadChatHistory(response.room.id);
+				$("#support-chat").attr('data-room-id', response.room.id);
+				loadChatHistory(response.room.id, chatToken, token);
 			}
-		},
-		error: function(xhr) {
-			console.error('Ошибка получения комнаты чата:', xhr.responseText);
 		}
 	});
-
-	function loadChatHistory(roomId) {
-		$.ajax({
-			url: `/api/v1/chat/rooms/${roomId}/messages`,
-			method: 'GET',
-			success: function(response) {
-				if (response.success && response.messages) {
-					$('#chat-body').empty();
-
-					response.messages.forEach(function(message) {
-						const from = message.user_id ? 'user' : 'support';
-						addMessage(message.message, from);
-					});
-				}
-			}
-		});
-	}
-
 
 	closeBtn.on('click', function () {
 		if (supportChat.hasClass('closed')) {
@@ -107,7 +96,7 @@ $(document).ready(function () {
 		const input = $('#chat-input');
 		const message = input.val().trim();
 		const roomId = $("#support-chat").data('room-id') || 1;
-		const csrfToken = $('meta[name="csrf-token"]').attr('content');
+		console.log(token);
 		if (message) {
 			addMessage(message, 'user');
 			input.val('');
@@ -116,13 +105,17 @@ $(document).ready(function () {
 				method: 'POST',
 				data: {
 					message: message,
-					_token: csrfToken
+					_token: token
 				},
 				headers: {
-					'X-CSRF-TOKEN': csrfToken
+					'X-CSRF-TOKEN': token,
+					'Authorization': `Bearer ${chatToken}`
 				},
 				success: function(response) {
 					console.log('Message successfully sent.', response);
+					if (response.room_id) {
+						$("#support-chat").attr('data-room-id', response.room_id);
+					}
 				},
 				error: function(xhr) {
 					console.error('Something went wrong:', xhr.responseText);
@@ -135,47 +128,6 @@ $(document).ready(function () {
 				addMessage('Thanks for answer, we will answer so fast as we can!', 'support');
 			}, 1000);
 		}
-	});
-
-	// Handle support chat form submission
-	$('form.supportchat-create').on('submit', function(e) {
-		e.preventDefault();
-
-		const form = $(this);
-		const email = form.find('input[name="email"]').val();
-
-		$.ajax({
-			url: form.attr('action'),
-			method: 'POST',
-			data: {
-				email: email,
-				_token: $('meta[name="csrf-token"]').attr('content')
-			},
-			success: function(response) {
-				// Clear the form
-				form.find('input[name="email"]').val('');
-
-				// Show a success message
-				addMessage(response.message, 'support');
-
-				// Hide the email form and show the chat interface
-				$('.create-support-chat').hide();
-				$('#chat-input').show();
-				$('#send-btn').show();
-			},
-			error: function(xhr) {
-				// Handle validation errors
-				if (xhr.responseJSON && xhr.responseJSON.errors) {
-					const errors = xhr.responseJSON.errors;
-					Object.keys(errors).forEach(key => {
-						addMessage(errors[key][0], 'support');
-					});
-				} else {
-					addMessage('Error creating chat room. Please try again.', 'support');
-					console.error('Error:', xhr.responseText);
-				}
-			}
-		});
 	});
 
 });
@@ -192,4 +144,40 @@ function addMessage(content, from = 'user') {
 	);
 	chatBody.append(message);
 	chatBody.scrollTop(chatBody[0].scrollHeight); // auto rolling
+}
+
+function loadChatHistory(roomId, chatToken, token) {
+	if (!roomId || !chatToken) {
+		console.error('Missing required parameters for loadChatHistory');
+		return;
+	}
+
+	$.ajax({
+		url: `/api/v1/chat/rooms/${roomId}/messages`,
+		method: 'GET',
+		headers: {
+			'Authorization': `Bearer ${chatToken}`
+		},
+		success: function(response) {
+			console.log('Chat history response:', response);
+			
+			if (response.success && Array.isArray(response.messages)) {
+				$('#chat-body').empty();
+
+				response.messages.forEach(function(message) {
+					const from = message.user_id ? 'user' : 'support';
+					addMessage(message.message, from);
+				});
+			} else {
+				console.error('Invalid response format:', response);
+				$('#chat-body').empty();
+				addMessage('Error loading chat history', 'support');
+			}
+		},
+		error: function(xhr) {
+			console.error('Error loading chat history:', xhr.responseText);
+			$('#chat-body').empty();
+			addMessage('Error loading chat history', 'support');
+		}
+	});
 }

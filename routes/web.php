@@ -1,5 +1,7 @@
 <?php
 
+require ('auth.php');
+
 use Illuminate\Support\Facades\Route;
 use Modules\SupportChat\App\Http\Controllers\SupportChatController;
 
