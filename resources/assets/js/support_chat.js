@@ -1,6 +1,5 @@
 import axios from 'axios';
 import $ from 'jquery';
-// import Echo from 'laravel-echo';
 import Pusher from "pusher-js";
 
 window.Pusher = Pusher;
@@ -14,32 +13,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 $(document).ready(function () {
 
-	// window.Echo = new Echo({
-	// 	broadcaster: 'pusher',
-	// 	key: 'local',
-	// 	wsHost: 'ws.ddev.site',
-	// 	cluster: 'mt1',
-	// 	wsPort: 6001,
-	// 	wssPort: 6001,
-	// 	forceTLS: false,
-	// 	encrypted: false,
-	// 	disableStats: true,
-	// });
-	//
-	// const roomId = $("#support-chat").data('room-id');
-	//
-	// window.Echo.private(`chat.room.${roomId}`)
-	// .listen('.new.message', (e) => {
-	// 	// Добавляем сообщение в UI
-	// 	const message = e.message;
-	// 	const from = message.user_id === userId ? 'user' : 'support';
-	// 	addMessage(message.message, from);
-	// });
-
 	const token = $('meta[name="csrf-token"]').attr('content');
 	const chatToken = $('meta[name="chat-token"]').attr('content');
-	console.log("AAAAA: ", token, "\n BBBB: ", chatToken);
-
 	const closeBtn = $("#chat-header .open-btn");
 	const supportChat = $("#support-chat");
 	const supportChatBtn = $("#support-chat .visibility");
@@ -57,7 +32,7 @@ $(document).ready(function () {
 		success: function(response) {
 			if (response.success && response.room) {
 				$("#support-chat").attr('data-room-id', response.room.id);
-				loadChatHistory(response.room.id, chatToken, token);
+				loadChatHistory(response.room.id, chatToken);
 			}
 		}
 	});
@@ -96,9 +71,12 @@ $(document).ready(function () {
 		const input = $('#chat-input');
 		const message = input.val().trim();
 		const roomId = $("#support-chat").data('room-id') || 1;
-		console.log(token);
 		if (message) {
-			addMessage(message, 'user');
+			addMessage({
+				message: message,
+				user:  {role: 'user'},
+				created_at: new Date().getTime()
+			});
 			input.val('');
 			$.ajax({
 				url: `/api/v1/chat/rooms/${roomId}/messages`,
@@ -112,41 +90,52 @@ $(document).ready(function () {
 					'Authorization': `Bearer ${chatToken}`
 				},
 				success: function(response) {
-					console.log('Message successfully sent.', response);
 					if (response.room_id) {
 						$("#support-chat").attr('data-room-id', response.room_id);
 					}
 				},
 				error: function(xhr) {
-					console.error('Something went wrong:', xhr.responseText);
-					addMessage('Something went wrong. Try again.', 'support');
+					// console.error('Something went wrong:', xhr.responseText);
+					addMessage({
+						message:'Something went wrong. Try again.',
+						user: {role: 'admin'},
+						created_at: new Date().getTime()
+					});
 				}
 			});
-
-
-			setTimeout(() => {
-				addMessage('Thanks for answer, we will answer so fast as we can!', 'support');
-			}, 1000);
 		}
 	});
 
 });
 
-function addMessage(content, from = 'user') {
+function addMessage(content) {
 	const chatBody = $('#chat-body');
 	const message = $('<div>', {
-		class: `chat-message ${from}-message`,
+		class: `chat-message ${content.user.role}-message`,
 	}).append(
 		$('<div>', {
-			class: 'message-bubble',
-			text: content,
-		})
+			class: 'message-bubble ',
+		}).append(
+			$('<div>', {
+				class: 'message-sender',
+				text: content.user.role
+			}),
+			$('<div>', {
+				class: 'message-text',
+				text: content.message
+			}),
+			$('<div>', {
+				class: 'message-time',
+				text: content.created_at
+			})
+		)
+
 	);
 	chatBody.append(message);
 	chatBody.scrollTop(chatBody[0].scrollHeight); // auto rolling
 }
 
-function loadChatHistory(roomId, chatToken, token) {
+function loadChatHistory(roomId, chatToken) {
 	if (!roomId || !chatToken) {
 		console.error('Missing required parameters for loadChatHistory');
 		return;
@@ -159,25 +148,31 @@ function loadChatHistory(roomId, chatToken, token) {
 			'Authorization': `Bearer ${chatToken}`
 		},
 		success: function(response) {
-			console.log('Chat history response:', response);
-			
 			if (response.success && Array.isArray(response.messages)) {
 				$('#chat-body').empty();
 
 				response.messages.forEach(function(message) {
-					const from = message.user_id ? 'user' : 'support';
-					addMessage(message.message, from);
+					addMessage(message);
 				});
 			} else {
 				console.error('Invalid response format:', response);
 				$('#chat-body').empty();
-				addMessage('Error loading chat history', 'support');
+
+				addMessage({
+					message: 'Error loading chat history',
+					user: {role: 'admin'},
+					created_at: new Date().getTime()
+				});
 			}
 		},
 		error: function(xhr) {
 			console.error('Error loading chat history:', xhr.responseText);
 			$('#chat-body').empty();
-			addMessage('Error loading chat history', 'support');
+			addMessage({
+				message: 'Error loading chat history',
+				user: {role: 'admin'},
+				created_at: new Date().getTime()
+			});
 		}
 	});
 }

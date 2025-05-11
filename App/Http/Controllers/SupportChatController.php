@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Modules\SupportChat\App\Events\NewMessage;
+use Modules\SupportChat\App\Http\Resources\MessageResource;
 use Modules\SupportChat\App\Models\ChatMessage;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\Services\SupportChatService;
@@ -85,8 +85,6 @@ class SupportChatController extends Controller
 		$message->status = 'sent';
 		$message->save();
 
-//		broadcast(new NewMessage($message))->toOthers();
-
 		return response()->json([
 			'success' => true,
 			'message' => $message,
@@ -97,7 +95,7 @@ class SupportChatController extends Controller
 	public function getMessages(ChatRoom $room): JsonResponse
 	{
 		$messages = $room->messages()
-			->with('user')
+			->with(['user.role'])
 			->latest()
 			->take(50)
 			->get()
@@ -106,7 +104,7 @@ class SupportChatController extends Controller
 
 		return response()->json([
 			'success' => true,
-			'messages' => $messages
+			'messages' => MessageResource::collection($messages)
 		]);
 	}
 

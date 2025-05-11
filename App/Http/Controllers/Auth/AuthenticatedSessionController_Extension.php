@@ -5,7 +5,6 @@ namespace Modules\SupportChat\App\Http\Controllers\Auth;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
