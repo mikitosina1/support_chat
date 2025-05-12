@@ -22,6 +22,20 @@ $(document).ready(function () {
 	const iconUp = $(".visibility .icon-up");
 	const iconClose = $(".visibility .icon-close");
 
+	if(chatToken === '' || chatToken === undefined) {
+		$("#chat-footer").html('<div class="auth-warning dark:text-gray-300">You must be logged in to send messages.</div>');
+		$('.chat-message.support-message').hide();
+	}
+
+	$.ajax({
+		url: '/get-user-info',
+		method: 'GET',
+		success: function(response) {
+			console.log(response);
+		}
+	});
+
+
 	// Initialize room ID
 	$.ajax({
 		url: '/api/v1/chat/room',
