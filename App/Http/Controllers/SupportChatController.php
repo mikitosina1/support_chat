@@ -29,7 +29,7 @@ class SupportChatController extends Controller
 	public function index(): Factory|\Illuminate\Foundation\Application|View|Application
 	{
 		$isActive = $this->supportChatService->isModuleActive();
-		return view('supportchat::support_chat', compact('isActive'));
+		return view('supportchat::supportchat_index', compact('isActive'));
 	}
 
 	public function createRoom(Request $request): JsonResponse

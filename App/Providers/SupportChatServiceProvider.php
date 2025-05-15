@@ -34,6 +34,18 @@ class SupportChatServiceProvider extends ServiceProvider
 				$supportChat = new SupportChat();
 				$view->with('supportChatAssets', $supportChat->getSupportChatAssets());
 			});
+
+			$this->app->booted(function () {
+				View::share('supportChatAdminActions', [
+					$this->moduleName => [
+						'open_chat' => [
+							'label' => 'Open Chat',
+							'route' => route('admin.supportchat.index'),
+							'icon'  => '💬',
+						]
+					]
+				]);
+			});
 		}
 	}
 

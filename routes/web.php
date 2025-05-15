@@ -20,3 +20,11 @@ Route::get('/get-user-info', function (Request $request) {
 		'r' => session('role')
 	]);
 });
+
+
+Route::middleware(['web', 'auth'])
+	->prefix('admin/support-chat')
+	->name('admin.supportchat.')
+	->group(function () {
+		Route::get('/', [SupportChatController::class, 'index'])->name('index');
+	});
