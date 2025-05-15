@@ -41,7 +41,7 @@ class SupportChatServiceProvider extends ServiceProvider
 						'open_chat' => [
 							'label' => 'Open Chat',
 							'route' => route('admin.supportchat.index'),
-							'icon'  => '💬',
+							'icon' => '💬',
 						]
 					]
 				]);

@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
  *
  * Main chat room class definition
  *
- * @property int    $id basic user id
+ * @property int $id basic user id
  * @property string $name chat room title
  * @property string $status chat room status
  * @property Carbon $created_at when created

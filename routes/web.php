@@ -1,6 +1,6 @@
 <?php
 
-require ('auth.php');
+require('auth.php');
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +20,6 @@ Route::get('/get-user-info', function (Request $request) {
 		'r' => session('role')
 	]);
 });
-
 
 Route::middleware(['web', 'auth'])
 	->prefix('admin/support-chat')

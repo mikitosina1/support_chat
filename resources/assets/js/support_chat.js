@@ -22,7 +22,7 @@ $(document).ready(function () {
 	const iconUp = $(".visibility .icon-up");
 	const iconClose = $(".visibility .icon-close");
 
-	if(chatToken === '' || chatToken === undefined) {
+	if (chatToken === '' || chatToken === undefined) {
 		$("#chat-footer").html('<div class="auth-warning dark:text-gray-300">You must be logged in to send messages.</div>');
 		$('.chat-message.support-message').hide();
 	}
@@ -30,7 +30,7 @@ $(document).ready(function () {
 	$.ajax({
 		url: '/get-user-info',
 		method: 'GET',
-		success: function(response) {
+		success: function (response) {
 			console.log(response);
 		}
 	});
@@ -43,7 +43,7 @@ $(document).ready(function () {
 		headers: {
 			'Authorization': `Bearer ${chatToken}`
 		},
-		success: function(response) {
+		success: function (response) {
 			if (response.success && response.room) {
 				$("#support-chat").attr('data-room-id', response.room.id);
 				loadChatHistory(response.room.id, chatToken);
@@ -88,7 +88,7 @@ $(document).ready(function () {
 		if (message) {
 			addMessage({
 				message: message,
-				user:  {role: 'user'},
+				user: {role: 'user'},
 				created_at: new Date().getTime()
 			});
 			input.val('');
@@ -103,15 +103,15 @@ $(document).ready(function () {
 					'X-CSRF-TOKEN': token,
 					'Authorization': `Bearer ${chatToken}`
 				},
-				success: function(response) {
+				success: function (response) {
 					if (response.room_id) {
 						$("#support-chat").attr('data-room-id', response.room_id);
 					}
 				},
-				error: function(xhr) {
+				error: function (xhr) {
 					// console.error('Something went wrong:', xhr.responseText);
 					addMessage({
-						message:'Something went wrong. Try again.',
+						message: 'Something went wrong. Try again.',
 						user: {role: 'admin'},
 						created_at: new Date().getTime()
 					});
@@ -143,7 +143,6 @@ function addMessage(content) {
 				text: content.created_at
 			})
 		)
-
 	);
 	chatBody.append(message);
 	chatBody.scrollTop(chatBody[0].scrollHeight); // auto rolling
@@ -161,11 +160,11 @@ function loadChatHistory(roomId, chatToken) {
 		headers: {
 			'Authorization': `Bearer ${chatToken}`
 		},
-		success: function(response) {
+		success: function (response) {
 			if (response.success && Array.isArray(response.messages)) {
 				$('#chat-body').empty();
 
-				response.messages.forEach(function(message) {
+				response.messages.forEach(function (message) {
 					addMessage(message);
 				});
 			} else {
@@ -179,7 +178,7 @@ function loadChatHistory(roomId, chatToken) {
 				});
 			}
 		},
-		error: function(xhr) {
+		error: function (xhr) {
 			console.error('Error loading chat history:', xhr.responseText);
 			$('#chat-body').empty();
 			addMessage({

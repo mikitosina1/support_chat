@@ -11,19 +11,19 @@ use Modules\SupportChat\App\Models\ChatMessage;
 
 class NewMessage implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+	use Dispatchable, InteractsWithSockets, SerializesModels;
 
 	public ChatMessage $message;
 
-    public function __construct(ChatMessage $message)
-    {
-        $this->message = $message->load('user');
-    }
+	public function __construct(ChatMessage $message)
+	{
+		$this->message = $message->load('user');
+	}
 
 	public function broadcastOn(): PrivateChannel
-    {
-	    return new PrivateChannel('chat.room.' . $this->message->__get("chat_room_id"));
-    }
+	{
+		return new PrivateChannel('chat.room.' . $this->message->__get("chat_room_id"));
+	}
 
 	public function broadcastAs(): string
 	{

@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use Modules\SupportChat\App\Http\Controllers\Auth\AuthenticatedSessionController_Extension;
 

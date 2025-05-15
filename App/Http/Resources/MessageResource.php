@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\SupportChat\App\Http\Resources;
 
 use App\Models\Role;

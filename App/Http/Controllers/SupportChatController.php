@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Modules\SupportChat\App\Http\Resources\MessageResource;
 use Modules\SupportChat\App\Models\ChatMessage;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\Services\SupportChatService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 
 class SupportChatController extends Controller
@@ -112,7 +112,7 @@ class SupportChatController extends Controller
 	{
 		// for authorized
 		if (auth()->check()) {
-			$room = ChatRoom::whereHas('users', function($query) {
+			$room = ChatRoom::whereHas('users', function ($query) {
 				$query->where('user_id', auth()->id());
 			})->first();
 

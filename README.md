@@ -3,10 +3,12 @@
 #### Laravel Support-chat for Laravel 10<br><hr>
 
 * Ensure, that you have `nwidart/laravel-modules` and `beyondcode/laravel-websockets` or install them before setting up
-	module.
+  module.
 * run `make ws-init` and `make ws-start` or if you haven't 'make' package:
-* * move to file Modules/SupportChat/Makefile
-* * run manually subcommands (look upper)
+*
+	* move to file Modules/SupportChat/Makefile
+*
+	* run manually subcommands (look upper)
 * add to **resources/views/app.blade.php**  in body:
 
 ```php
@@ -32,6 +34,7 @@ return defineConfig({
 ``` 
 
 ## Full root vite.config.js example:
+
 ```js
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
