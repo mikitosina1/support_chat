@@ -148,4 +148,23 @@ class SupportChatController extends Controller
 		]);
 	}
 
+	public function getTranslations(Request $request): JsonResponse
+	{
+		$locale = $request->header('Accept-Language') ?? app()->getLocale();
+		$locale = substr($locale, 0, 2);
+
+		$availableLocales = ['en', 'de', 'ru'];
+		if (!in_array($locale, $availableLocales)) {
+			$locale = 'en'; // basic translation
+		}
+
+		$translations = trans('chat_lang', [], $locale);
+
+		return response()->json([
+			'success' => true,
+			'translations' => $translations
+		]);
+	}
+
+
 }
