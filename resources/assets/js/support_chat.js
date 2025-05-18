@@ -47,15 +47,15 @@ async function getUserInfo() {
 			method: 'GET'
 		});
 	} catch (error) {
-		console.error(__('user_info_error', 'Ошибка получения информации о пользователе:'), error);
+		console.error(__('user_info_error', 'Error receiving user information: '), error);
 		throw error;
 	}
 }
 
 async function initializeRoom(chatToken) {
 	if (!chatToken) {
-		console.error(__('token_missing', 'Отсутствует токен для инициализации комнаты'));
-		return Promise.reject(new Error(__('chat_token_missing', 'Отсутствует токен чата')));
+		console.error(__('token_missing', 'Missing room initialisation token'));
+		return Promise.reject(new Error(__('chat_token_missing', 'Missing chat token')));
 	}
 
 	try {
@@ -72,11 +72,11 @@ async function initializeRoom(chatToken) {
 			$("#support-chat").attr('data-room-id', roomId);
 			return roomId;
 		} else {
-			console.error(__('room_data_error', 'Не удалось получить данные комнаты:'), response);
+			console.error(__('room_data_error', 'Failed to retrieve room data: '), response);
 			return null;
 		}
 	} catch (error) {
-		console.error(__('room_request_error', 'Ошибка при запросе данных комнаты:'), error);
+		console.error(__('room_request_error', 'Failed to request room data: '), error);
 		throw error;
 	}
 }
@@ -199,7 +199,7 @@ async function initializeChat() {
 		const iconClose = $(".visibility .icon-close");
 
 		if (chatToken === '' || chatToken === undefined) {
-			$("#chat-footer").html(`<div class="auth-warning dark:text-gray-300">${__('auth_required', 'Для отправки сообщений необходимо войти в систему.')}</div>`);
+			$("#chat-footer").html(`<div class="auth-warning dark:text-gray-300">${__('auth_required', 'You must be logged in to send messages.')}</div>`);
 			$('.chat-message.support-message').hide();
 			return;
 		}

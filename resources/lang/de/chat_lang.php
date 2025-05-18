@@ -21,4 +21,5 @@ return [
 	'room_id_error' => 'Raum-ID konnte nicht abgerufen werden',
 	'room_data_error' => 'Raumdaten konnten nicht abgerufen werden',
 	'chat_init_log_error' => 'Chat konnte nicht initialisiert werden: ',
+	'user_info_error' => 'Fehler beim Empfang von Benutzerinformationen: ',
 ];

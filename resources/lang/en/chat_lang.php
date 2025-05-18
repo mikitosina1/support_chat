@@ -21,4 +21,5 @@ return [
 	'room_id_error' => 'Failed to retrieve room ID',
 	'room_data_error' => 'Failed to retrieve room data',
 	'chat_init_log_error' => 'Failed to initialise the chat room: ',
+	'user_info_error' => 'Error receiving user information: ',
 ];
