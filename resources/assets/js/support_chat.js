@@ -18,7 +18,7 @@ function __(key, fallback) {
 	}
 	return fallback || key;
 }
-йцуйцу
+
 // getting translations
 async function loadTranslations(chatToken) {
 	try {
