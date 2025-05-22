@@ -1,8 +1,8 @@
 import axios from 'axios';
 import $ from 'jquery';
-import Pusher from "pusher-js";
+// import Pusher from "pusher-js";
 
-window.Pusher = Pusher;
+// window.Pusher = Pusher;
 
 window.$ = $;
 window.axios = axios;
