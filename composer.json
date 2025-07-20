@@ -30,13 +30,13 @@
 	"autoload": {
 		"psr-4": {
 			"Modules\\SupportChat\\": "../../Modules/SupportChat",
-			"Database\\Migrations\\": "./Database/Migrations/",
+			"Database\\Migrations\\": "./Database/migrations/",
 			"Database\\Seeders\\": "./Database/Seeders/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Modules\\SupportChat\\Tests\\": "tests/"
+			"Modules\\SupportChat\\Tests\\": "../../Modules/SupportChat/tests/"
 		}
 	}
 }
