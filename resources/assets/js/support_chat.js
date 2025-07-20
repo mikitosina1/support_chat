@@ -188,7 +188,6 @@ function addMessage(content) {
 
 async function initializeChat() {
 	try {
-
 		const token = $('meta[name="csrf-token"]').attr('content');
 		const chatToken = $('meta[name="chat-token"]').attr('content');
 		const closeBtn = $("#chat-header .open-btn");
@@ -206,7 +205,6 @@ async function initializeChat() {
 		await loadTranslations(chatToken);
 
 		const userInfo = await getUserInfo();
-		console.log(userInfo);
 
 		try {
 			const roomId = await initializeRoom(chatToken);
@@ -230,7 +228,7 @@ async function initializeChat() {
 			});
 		}
 
-		closeBtn.on('click', function () {
+		closeBtn.click(function () {
 			if (supportChat.hasClass('closed')) {
 				supportChat.removeClass('closed');
 				supportChatBtn.removeClass('open-btn');
