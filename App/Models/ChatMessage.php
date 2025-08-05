@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Modules\SupportChat\Database\factories\ChatMessageFactory;
 
 /**
  * Class ChatRoom
@@ -45,5 +46,13 @@ class ChatMessage extends Model
 	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
+	}
+
+	/**
+	 * redefinition for class factory
+	 */
+	protected static function newFactory(): ChatMessageFactory
+	{
+		return ChatMessageFactory::new();
 	}
 }

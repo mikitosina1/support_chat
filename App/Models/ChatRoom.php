@@ -4,10 +4,12 @@ namespace Modules\SupportChat\App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Modules\SupportChat\Database\factories\ChatRoomFactory;
 
 /**
  * Class ChatRoom
@@ -26,6 +28,8 @@ use Illuminate\Support\Carbon;
  */
 class ChatRoom extends Model
 {
+	use HasFactory;
+
 	protected $fillable = [
 		'name',
 		'status'
@@ -53,17 +57,24 @@ class ChatRoom extends Model
 	 */
 	public function create(array $data): ChatRoom
 	{
-		// Create the chat room
+		// Create a chat room
 		$room = new self();
 		$room->name = $data['name'];
 		$room->status = $data['status'] ?? 'open';
 		$room->save();
 
-		// Associate the current user with the room
-		if (auth()->check()) {
+		// Associate a current user with the room
+		if (auth()->check())
 			$room->users()->attach(auth()->id());
-		}
 
 		return $room;
+	}
+
+	/**
+	 * redefinition for class factory
+	 */
+	protected static function newFactory(): ChatRoomFactory
+	{
+		return ChatRoomFactory::new();
 	}
 }
