@@ -7,6 +7,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Modules\SupportChat\App\Http\Resources\MessageResource;
 use Modules\SupportChat\App\Models\ChatMessage;
@@ -26,10 +27,20 @@ class SupportChatController extends Controller
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function index(): Factory|\Illuminate\Foundation\Application|View|Application
+	public function index(): Factory|\Illuminate\Foundation\Application|View|Application|RedirectResponse
 	{
 		$isActive = $this->supportChatService->isModuleActive();
-		return view('supportchat::supportchat_index', compact('isActive'));
+		$user = auth()->user();
+		if (!$isActive && !$user->isAdmin())
+			return response()->redirectTo('/');
+		$userAttr = $user->only([
+			'id',
+			'name',
+			'lastname',
+			'email',
+			'profile_photo'
+		]);
+		return view('supportchat::supportchat_index', compact('isActive', 'userAttr'));
 	}
 
 	public function createRoom(Request $request): JsonResponse
