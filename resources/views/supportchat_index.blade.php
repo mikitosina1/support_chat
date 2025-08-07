@@ -12,7 +12,7 @@
 	<div class="cloud">
 		<div class="dark:bg-gray-800 shadow sm:rounded-lg mt-8 support-chat-block">
 			@foreach($chatRooms as $attr)
-				<a href="{{$attr['id']}}" class="chat-link">
+				<a href="{{ route('admin.supportchat.room.show', ['room' => $attr['id']]) }}" class="chat-link">
 					{{$attr['name']}}
 					<span>
 						created: {{$attr['created_at']}},

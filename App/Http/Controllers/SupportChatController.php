@@ -89,6 +89,23 @@ class SupportChatController extends Controller
 		]);
 	}
 
+	public function show(ChatRoom $room): View|Factory|Application
+	{
+		$user = auth()->user();
+		$adminAttr = $user->only([
+			'id',
+			'name',
+			'lastname',
+			'email',
+			'profile_photo'
+		]);
+		$messages = $this->getMessages($room);
+		var_dump($messages);
+
+		return view('supportchat::room_show', compact('room', 'adminAttr', 'messages'));
+	}
+
+
 	public function sendMessage(Request $request, ChatRoom $room): JsonResponse
 	{
 		$request->validate([

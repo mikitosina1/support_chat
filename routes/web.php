@@ -26,4 +26,5 @@ Route::middleware(['web', 'auth'])
 	->name('admin.supportchat.')
 	->group(function () {
 		Route::get('/', [SupportChatController::class, 'index'])->name('index');
+		Route::get('/room/{room}', [SupportChatController::class, 'show'])->name('room.show');
 	});
