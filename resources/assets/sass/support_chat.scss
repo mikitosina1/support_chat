@@ -129,10 +129,9 @@
 				max-width: 80%;
 				padding: 10px 14px;
 				border-radius: 20px;
-				background-color: #e2e8f0; /* светло-серый */
+				background-color: #e2e8f0;
 				color: #1a202c;
 
-				/* Новые стили для внутренних элементов */
 				display: flex;
 				flex-direction: column;
 				width: 100%;
@@ -254,5 +253,42 @@
 		opacity: 0;
 		height: 0;
 		width: 0;
+	}
+}
+
+.cloud {
+	display: flex;
+
+	.support-chat-block {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		a.chat-link {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1rem;
+			color: white;
+			margin-bottom: 0.5rem;
+			border-radius: 0.5rem;
+			transition: background-color 0.2s;
+			text-decoration: none;
+
+			&:hover {
+				background-color: #2563ee;
+				color: black;
+			}
+
+			span {
+				font-size: 0.75rem;
+				color: #9CA3AF;
+				margin-left: 1rem;
+				font-weight: 400;
+				opacity: 0.8;
+			}
+		}
+
 	}
 }

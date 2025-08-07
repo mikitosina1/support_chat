@@ -27,20 +27,26 @@ class SupportChatController extends Controller
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function index(): Factory|\Illuminate\Foundation\Application|View|Application|RedirectResponse
+	public function index(): Factory|View|Application|RedirectResponse
 	{
 		$isActive = $this->supportChatService->isModuleActive();
 		$user = auth()->user();
+
 		if (!$isActive && !$user->isAdmin())
 			return response()->redirectTo('/');
-		$userAttr = $user->only([
+
+		$adminAttr = $user->only([
 			'id',
 			'name',
 			'lastname',
 			'email',
 			'profile_photo'
 		]);
-		return view('supportchat::supportchat_index', compact('isActive', 'userAttr'));
+
+		$rooms = new ChatRoom();
+		$chatRooms = $rooms->getAllRooms();
+
+		return view('supportchat::supportchat_index', compact( 'adminAttr', 'chatRooms'));
 	}
 
 	public function createRoom(Request $request): JsonResponse

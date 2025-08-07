@@ -4,6 +4,7 @@ namespace Modules\SupportChat\App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -68,6 +69,43 @@ class ChatRoom extends Model
 			$room->users()->attach(auth()->id());
 
 		return $room;
+	}
+
+	/**
+	 * gets a room list
+	 * @return array|
+	 */
+	public function getAllRooms(): array
+	{
+		return self::select([
+			'id',
+			'name',
+			'status',
+			'created_at',
+			'updated_at'
+		])
+			->with([
+				'users:id,name,lastname,email',
+				'messages:id,chat_room_id,user_id,message,status,created_at'
+			])
+			->withCount('messages')
+			->orderBy('updated_at', 'desc')
+			->get()
+			->map(function ($room) {
+				return [
+					'id' => $room->id,
+					'name' => $room->name,
+					'status' => $room->status,
+					'created_at' => $room->created_at->format('d.m.Y H:i'),
+					'updated_at' => $room->updated_at->format('d.m.Y H:i'),
+					'created_human' => $room->created_at->diffForHumans(),
+					'updated_human' => $room->updated_at->diffForHumans(),
+					'messages_count' => $room->messages_count,
+					'users' => $room->users,
+					'messages' => $room->messages
+				];
+			})
+			->toArray();
 	}
 
 	/**
