@@ -22,4 +22,5 @@ return [
 	'room_data_error' => 'Raumdaten konnten nicht abgerufen werden',
 	'chat_init_log_error' => 'Chat konnte nicht initialisiert werden: ',
 	'user_info_error' => 'Fehler beim Empfang von Benutzerinformationen: ',
+	'back_to_prev_page' => 'Zurück zur vorherigen Seite',
 ];

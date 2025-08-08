@@ -22,4 +22,5 @@ return [
 	'room_data_error' => 'Failed to retrieve room data',
 	'chat_init_log_error' => 'Failed to initialise the chat room: ',
 	'user_info_error' => 'Error receiving user information: ',
+	'back_to_prev_page' => 'Return to previous page',
 ];

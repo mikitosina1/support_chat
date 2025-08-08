@@ -99,8 +99,15 @@ class SupportChatController extends Controller
 			'email',
 			'profile_photo'
 		]);
-		$messages = $this->getMessages($room);
-		var_dump($messages);
+		$messages = MessageResource::collection(
+			$room->messages()
+				->with(['user.role'])
+				/** TODO: think, how much messages to show */
+//					->latest()
+//					->take(50)
+				->get()
+				->values()
+		)->resolve();
 
 		return view('supportchat::room_show', compact('room', 'adminAttr', 'messages'));
 	}
