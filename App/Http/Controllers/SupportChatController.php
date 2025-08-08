@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Modules\SupportChat\App\Events\NewMessage;
 use Modules\SupportChat\App\Http\Resources\MessageResource;
 use Modules\SupportChat\App\Models\ChatMessage;
 use Modules\SupportChat\App\Models\ChatRoom;
@@ -102,7 +103,7 @@ class SupportChatController extends Controller
 		$messages = MessageResource::collection(
 			$room->messages()
 				->with(['user.role'])
-				/** TODO: think, how much messages to show */
+				/** TODO: think, how much messages to show if i use ajax */
 //					->latest()
 //					->take(50)
 				->get()
@@ -126,6 +127,9 @@ class SupportChatController extends Controller
 		$message->status = 'sent';
 		$message->save();
 
+		/** TODO: think, how to send message to all users in room */
+//		broadcast(new NewMessage($message))->toOthers();
+
 		return response()->json([
 			'success' => true,
 			'message' => $message,
@@ -135,13 +139,18 @@ class SupportChatController extends Controller
 
 	public function getMessages(ChatRoom $room): JsonResponse
 	{
-		$messages = $room->messages()
-			->with(['user.role'])
-			->latest()
-			->take(50)
-			->get()
-			->reverse()
-			->values();
+		$afterId = request()->integer('after_id');
+
+		$query = $room->messages()->with(['user.role']);
+
+		if ($afterId > 0) {
+			// only new messages
+			$query->where('id', '>', $afterId)->orderBy('id', 'asc');
+			$messages = $query->get();
+		} else {
+			// First query: last 50, chronologically
+			$messages = $query->latest()->take(50)->get()->reverse()->values();
+		}
 
 		return response()->json([
 			'success' => true,

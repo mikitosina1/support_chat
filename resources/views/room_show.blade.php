@@ -10,18 +10,21 @@
 		@endforeach
 	</div>
 
-	<div class="dialog-container">
-		<div class="dark:bg-gray-800 shadow sm:rounded-lg mt-8 p-6">
+	<div class="dialog-container"
+		 data-room-id="{{ $room->id }}"
+		 data-fetch-url="{{ route('admin.supportchat.room.messages.index', ['room' => $room->id]) }}"
+		 data-post-url="{{ route('admin.supportchat.room.messages.store', ['room' => $room->id]) }}">
+	<div class="dark:bg-gray-800 shadow sm:rounded-lg mt-8 p-6">
 			<div class="dialog-header">
-				<h2 class="text-xl font-semibold">{{ $room->name }}</h2>
-				<a href="{{ route('admin.supportchat.index') }}" class="text-blue-500 hover:text-blue-700">
+				<h2 class="text-xl font-semibold text-white">{{ $room->name }}</h2>
+				<a href="{{ route('admin.supportchat.index') }}" class="text-white hover:text-blue-700">
 					← @lang('supportchat::chat_lang.back_to_prev_page')
 				</a>
 			</div>
 
-			<div class="dialog-messages">
+			<div class="dialog-messages" id="dialog-messages">
 				@foreach($messages as $message)
-					<div class="dialog-message {{ $message['user']['role'] }}-dialog-message">
+					<div class="dialog-message {{ $message['user']['role'] }}-dialog-message" data-id="{{ $message['id'] }}">
 						<div class="dialog-bubble">
 							<div class="dialog-sender">
 								{{ $message['user']['name'] }} {{ $message['user']['lastname'] }}

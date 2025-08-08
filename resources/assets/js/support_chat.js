@@ -1,8 +1,5 @@
 import axios from 'axios';
 import $ from 'jquery';
-// import Pusher from "pusher-js";
-
-// window.Pusher = Pusher;
 
 window.$ = $;
 window.axios = axios;
@@ -297,3 +294,113 @@ $(document).ready(function() {
 			console.error(__('chat_init_error', 'Chat initialisation error. Try reloading the page. '), error);
 		});
 });
+
+/**
+ * ------------------------------
+ * Admin page of dialog (web)
+ * ------------------------------
+ * Initialized only with active .dialog-container
+ */
+(function initAdminDialog() {
+	const container = document.querySelector('.dialog-container');
+	if (!container) return; // if no container, do nothing
+
+	const messagesWrap = document.getElementById('dialog-messages');
+	const input = document.getElementById('dialog-input');
+	const sendBtn = document.getElementById('dialog-send-btn');
+	const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+	const fetchUrl = container.getAttribute('data-fetch-url');
+	const postUrl = container.getAttribute('data-post-url');
+
+	function getLastMessageId() {
+		const nodes = messagesWrap.querySelectorAll('.dialog-message[data-id]');
+		if (!nodes.length) return 0;
+		const last = nodes[nodes.length - 1].getAttribute('data-id');
+		return parseInt(last || '0', 10) || 0;
+	}
+
+	function escapeHtml(str) {
+		const div = document.createElement('div');
+		div.innerText = str ?? '';
+		return div.innerHTML;
+	}
+
+	function renderMessage(message) {
+		const wrapper = document.createElement('div');
+		const role = message?.user?.role || 'user';
+		wrapper.className = `dialog-message ${role}-dialog-message`;
+		if (message.id) wrapper.setAttribute('data-id', message.id);
+
+		const name = [message?.user?.name, message?.user?.lastname].filter(Boolean).join(' ');
+		wrapper.innerHTML = `
+			<div class="dialog-bubble">
+				<div class="dialog-sender">
+					${escapeHtml(name)}
+					<span class="text-xs">(${escapeHtml(role)})</span>
+				</div>
+				<div class="dialog-text">${escapeHtml(message.message)}</div>
+				<div class="dialog-time">${escapeHtml(message.created_at || '')}</div>
+			</div>
+		`;
+		messagesWrap.appendChild(wrapper);
+		messagesWrap.scrollTop = messagesWrap.scrollHeight;
+	}
+
+	async function pollNew() {
+		try {
+			const afterId = getLastMessageId();
+			const url = afterId ? `${fetchUrl}?after_id=${afterId}` : fetchUrl;
+			const res = await fetch(url, {
+				headers: { 'X-Requested-With': 'XMLHttpRequest' }
+			});
+			const data = await res.json();
+			if (data?.success && Array.isArray(data.messages)) {
+				data.messages.forEach(renderMessage);
+			}
+		} catch (e) {
+			console.error('Polling error:', e);
+		}
+	}
+
+	async function send() {
+		const message = (input.value || '').trim();
+		if (!message) return;
+
+		// show the message in the chat in a moment (optional)
+		renderMessage({
+			message,
+			created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+			user: { role: 'admin', name: '', lastname: '' }
+		});
+
+		input.value = '';
+
+		try {
+			await fetch(postUrl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': csrf,
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				body: JSON.stringify({ message })
+			});
+			// after sending poll new messages
+			await pollNew();
+		} catch (e) {
+			console.error('Send error:', e);
+		}
+	}
+
+	sendBtn?.addEventListener('click', send);
+	input?.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			send();
+		}
+	});
+
+	// start polling new messages
+	pollNew();
+	setInterval(pollNew, 12000);
+})();
