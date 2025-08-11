@@ -8,10 +8,9 @@
 	right: 10px;
 	height: 40vh;
 	width: 20vw;
-	border: 1px solid gray;
+	border: 1px solid var(--block-border-color);
 	border-radius: 10px;
 	padding: .5em;
-	background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	transition: height 0.3s ease, width 0.3s ease;
 
@@ -78,8 +77,9 @@
 				width: 1.5em;
 				background: transparent;
 				border: none;
-				color: whitesmoke;
+				color: var(--main-text-color);
 				cursor: pointer;
+				margin-right: 1em;
 			}
 		}
 	}
@@ -91,7 +91,6 @@
 		left: 50%;
 		width: 2px;
 		height: 14px;
-		background-color: whitesmoke;
 		transform: translate(-50%, -50%) rotate(45deg);
 	}
 

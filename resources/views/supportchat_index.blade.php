@@ -10,7 +10,7 @@
 		@endforeach
 	</div>
 	<div class="cloud">
-		<div class="dark:bg-gray-800 shadow sm:rounded-lg mt-8 support-chat-block">
+		<div class="dark:bg-gray-900 shadow sm:rounded-lg mt-8 support-chat-block">
 			@foreach($chatRooms as $attr)
 				<a href="{{ route('admin.supportchat.room.show', ['room' => $attr['id']]) }}" class="chat-link">
 					{{$attr['name']}}

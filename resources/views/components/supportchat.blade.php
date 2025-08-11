@@ -2,7 +2,7 @@
 	@vite($asset)
 @endforeach
 <meta name="chat-token" content="{{ session('chat_token')['token'] ?? '' }}">
-<div id="support-chat" class="dark:bg-gray-800 closed" data-room-id="">
+<div id="support-chat" class="dark:bg-gray-900 closed" data-room-id="">
 	<div id="chat-header" class="dark:text-gray-300">
 		<div>@lang('supportchat::chat_lang.s_chat')</div>
 		<div class="chat-controls">
