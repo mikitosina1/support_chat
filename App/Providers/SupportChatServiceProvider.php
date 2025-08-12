@@ -6,6 +6,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Modules\ModuleManager\App\Services\ModuleAdminActionRegistrar;
 use Modules\SupportChat\App\View\Components\SupportChat;
 use Modules\SupportChat\Services\SupportChatService;
 
@@ -35,17 +36,14 @@ class SupportChatServiceProvider extends ServiceProvider
 				$view->with('supportChatAssets', $supportChat->getSupportChatAssets());
 			});
 
-			$this->app->booted(function () {
-				View::share('supportChatAdminActions', [
-					$this->moduleName => [
-						'open_chat' => [
-							'label' => 'Open Chat',
-							'route' => route('admin.supportchat.index'),
-							'icon' => '💬',
-						]
-					]
-				]);
-			});
+			ModuleAdminActionRegistrar::register(
+				$this->moduleName,
+				$this->moduleNameLower,
+				'admin.supportchat.index',
+				$this->moduleNameLower . '::admin.config_chat',
+				'💬',
+				fn() => $this->app->make(SupportChatService::class)->isModuleActive()
+			);
 		}
 	}
 
