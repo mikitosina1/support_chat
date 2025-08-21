@@ -14,7 +14,7 @@
 		 data-room-id="{{ $room->id }}"
 		 data-fetch-url="{{ route('admin.supportchat.room.messages.index', ['room' => $room->id]) }}"
 		 data-post-url="{{ route('admin.supportchat.room.messages.store', ['room' => $room->id]) }}">
-	<div class="dark:bg-gray-900 shadow sm:rounded-lg mt-8 p-6">
+		<div class="dark:bg-gray-900 shadow sm:rounded-lg mt-8 p-6">
 			<div class="dialog-header">
 				<h2 class="text-xl font-semibold text-white">{{ $room->name }}</h2>
 				<a href="{{ route('admin.supportchat.index') }}" class="text-white hover:text-blue-700">
@@ -24,7 +24,8 @@
 
 			<div class="dialog-messages" id="dialog-messages">
 				@foreach($messages as $message)
-					<div class="dialog-message {{ $message['user']['role'] }}-dialog-message" data-id="{{ $message['id'] }}">
+					<div class="dialog-message {{ $message['user']['role'] }}-dialog-message"
+						 data-id="{{ $message['id'] }}">
 						<div class="dialog-bubble">
 							<div class="dialog-sender">
 								{{ $message['user']['name'] }} {{ $message['user']['lastname'] }}

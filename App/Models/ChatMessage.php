@@ -38,6 +38,14 @@ class ChatMessage extends Model
 	];
 	private mixed $chat_room_id;
 
+	/**
+	 * redefinition for class factory
+	 */
+	protected static function newFactory(): ChatMessageFactory
+	{
+		return ChatMessageFactory::new();
+	}
+
 	public function chatRoom(): BelongsTo
 	{
 		return $this->belongsTo(ChatRoom::class);
@@ -46,13 +54,5 @@ class ChatMessage extends Model
 	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
-	}
-
-	/**
-	 * redefinition for class factory
-	 */
-	protected static function newFactory(): ChatMessageFactory
-	{
-		return ChatMessageFactory::new();
 	}
 }

@@ -94,7 +94,7 @@ async function loadChatHistory(roomId, chatToken) {
 
 		if (response.success && Array.isArray(response.messages)) {
 			$('#chat-body').empty();
-			response.messages.forEach(function(message) {
+			response.messages.forEach(function (message) {
 				addMessage(message);
 			});
 			return response.messages;
@@ -288,7 +288,7 @@ async function initializeChat() {
 	}
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 	initializeChat()
 		.catch(error => {
 			console.error(__('chat_init_error', 'Chat initialisation error. Try reloading the page. '), error);
@@ -351,7 +351,7 @@ $(document).ready(function() {
 			const afterId = getLastMessageId();
 			const url = afterId ? `${fetchUrl}?after_id=${afterId}` : fetchUrl;
 			const res = await fetch(url, {
-				headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				headers: {'X-Requested-With': 'XMLHttpRequest'}
 			});
 			const data = await res.json();
 			if (data?.success && Array.isArray(data.messages)) {
@@ -369,8 +369,8 @@ $(document).ready(function() {
 		// show the message in the chat in a moment (optional)
 		renderMessage({
 			message,
-			created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-			user: { role: 'admin', name: '', lastname: '' }
+			created_at: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
+			user: {role: 'admin', name: '', lastname: ''}
 		});
 
 		input.value = '';
@@ -383,7 +383,7 @@ $(document).ready(function() {
 					'X-CSRF-TOKEN': csrf,
 					'X-Requested-With': 'XMLHttpRequest'
 				},
-				body: JSON.stringify({ message })
+				body: JSON.stringify({message})
 			});
 			// after sending poll new messages
 			await pollNew();

@@ -3,6 +3,7 @@
 namespace Modules\SupportChat\App\Models;
 
 use App\Models\User;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,7 @@ use Modules\SupportChat\Database\factories\ChatRoomFactory;
  * @property Carbon $created_at when created
  * @property Carbon $updated_at when created
  *
- * @method static Builder|ChatRoom whereHas($relation, \Closure $callback = null, $operator = '>=', $count = 1)
+ * @method static Builder|ChatRoom whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1)
  * @method static Builder|ChatRoom where($column, $operator = null, $value = null, $boolean = 'and')
  * @method static Builder|ChatRoom create(array $attributes = [])
  */
@@ -40,15 +41,17 @@ class ChatRoom extends Model
 		'status' => 'string'
 	];
 
+	/**
+	 * redefinition for class factory
+	 */
+	protected static function newFactory(): ChatRoomFactory
+	{
+		return ChatRoomFactory::new();
+	}
+
 	public function messages(): HasMany
 	{
 		return $this->hasMany(ChatMessage::class);
-	}
-
-	public function users(): BelongsToMany
-	{
-		return $this->belongsToMany(User::class, 'chat_room_users')
-			->withTimestamps();
 	}
 
 	/**
@@ -69,6 +72,12 @@ class ChatRoom extends Model
 			$room->users()->attach(auth()->id());
 
 		return $room;
+	}
+
+	public function users(): BelongsToMany
+	{
+		return $this->belongsToMany(User::class, 'chat_room_users')
+			->withTimestamps();
 	}
 
 	/**
@@ -106,13 +115,5 @@ class ChatRoom extends Model
 				];
 			})
 			->toArray();
-	}
-
-	/**
-	 * redefinition for class factory
-	 */
-	protected static function newFactory(): ChatRoomFactory
-	{
-		return ChatRoomFactory::new();
 	}
 }

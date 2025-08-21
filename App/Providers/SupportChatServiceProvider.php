@@ -48,17 +48,6 @@ class SupportChatServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Register the service provider.
-	 */
-	public function register(): void
-	{
-		$this->app->register(RouteServiceProvider::class);
-		$this->app->singleton(SupportChatService::class, function ($app) {
-			return new SupportChatService();
-		});
-	}
-
-	/**
 	 * Register translations.
 	 */
 	public function registerTranslations(): void
@@ -99,14 +88,6 @@ class SupportChatServiceProvider extends ServiceProvider
 		Blade::componentNamespace($componentNamespace, $this->moduleNameLower);
 	}
 
-	/**
-	 * Get the services provided by the provider.
-	 */
-	public function provides(): array
-	{
-		return [];
-	}
-
 	private function getPublishableViewPaths(): array
 	{
 		$paths = [];
@@ -117,5 +98,24 @@ class SupportChatServiceProvider extends ServiceProvider
 		}
 
 		return $paths;
+	}
+
+	/**
+	 * Register the service provider.
+	 */
+	public function register(): void
+	{
+		$this->app->register(RouteServiceProvider::class);
+		$this->app->singleton(SupportChatService::class, function ($app) {
+			return new SupportChatService();
+		});
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 */
+	public function provides(): array
+	{
+		return [];
 	}
 }
