@@ -23,21 +23,21 @@ use Illuminate\Support\Carbon;
  */
 class MessageResource extends JsonResource
 {
-	public function toArray(Request $request): array
-	{
-		return [
-			'id' => $this->id,
-			'message' => $this->message,
-			'status' => $this->status,
-			'created_at' => $this->created_at->format('H:i'),
-			'updated_at' => $this->updated_at->format('H:i'),
-			'user' => [
-				'name' => $this->user->name,
-				'lastname' => $this->user->lastname,
-				'email' => $this->user->email,
-				'profile_photo' => $this->user->profile_photo,
-				'role' => optional($this->user->role)->title ?? 'user'
-			]
-		];
-	}
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'message' => $this->message,
+            'status' => $this->status,
+            'created_at' => $this->created_at->format('H:i'),
+            'updated_at' => $this->updated_at->format('H:i'),
+            'user' => [
+                'name' => $this->user->name,
+                'lastname' => $this->user->lastname,
+                'email' => $this->user->email,
+                'profile_photo' => $this->user->profile_photo,
+                'role' => optional($this->user->role)->title ?? 'user',
+            ],
+        ];
+    }
 }

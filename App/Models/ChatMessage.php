@@ -24,35 +24,36 @@ use Modules\SupportChat\Database\factories\ChatMessageFactory;
  */
 class ChatMessage extends Model
 {
-	use HasFactory;
+    use HasFactory;
 
-	protected $fillable = [
-		'chat_room_id',
-		'user_id',
-		'message',
-		'status'
-	];
+    protected $fillable = [
+        'chat_room_id',
+        'user_id',
+        'message',
+        'status',
+    ];
 
-	protected $casts = [
-		'status' => 'string'
-	];
-	private mixed $chat_room_id;
+    protected $casts = [
+        'status' => 'string',
+    ];
 
-	/**
-	 * redefinition for class factory
-	 */
-	protected static function newFactory(): ChatMessageFactory
-	{
-		return ChatMessageFactory::new();
-	}
+    private mixed $chat_room_id;
 
-	public function chatRoom(): BelongsTo
-	{
-		return $this->belongsTo(ChatRoom::class);
-	}
+    /**
+     * redefinition for class factory
+     */
+    protected static function newFactory(): ChatMessageFactory
+    {
+        return ChatMessageFactory::new();
+    }
 
-	public function user(): BelongsTo
-	{
-		return $this->belongsTo(User::class);
-	}
+    public function chatRoom(): BelongsTo
+    {
+        return $this->belongsTo(ChatRoom::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -7,13 +7,13 @@ use Modules\SupportChat\App\Models\ChatRoom;
 
 class ChatRoomFactory extends Factory
 {
-	protected $model = ChatRoom::class;
+    protected $model = ChatRoom::class;
 
-	public function definition(): array
-	{
-		return [
-			'name' => $this->faker->words(3, true),
-			'status' => $this->faker->randomElement(['open', 'closed'])
-		];
-	}
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->words(3, true),
+            'status' => $this->faker->randomElement(['open', 'closed']),
+        ];
+    }
 }

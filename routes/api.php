@@ -16,12 +16,12 @@ use Modules\SupportChat\App\Http\Controllers\SupportChatController;
 */
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-	Route::get('supportchat', fn(Request $request) => $request->user())->name('supportchat');
-	Route::post('/chat/rooms', [SupportChatController::class, 'createRoom']);
-	Route::post('/chat/rooms/{room}/join', [SupportChatController::class, 'joinRoom']);
-	Route::post('/chat/rooms/{room}/leave', [SupportChatController::class, 'leaveRoom']);
-	Route::post('/chat/rooms/{room}/messages', [SupportChatController::class, 'sendMessage']);
-	Route::get('/chat/rooms/{room}/messages', [SupportChatController::class, 'getMessages']);
-	Route::get('/chat/room', [SupportChatController::class, 'getOrCreateRoom'])->name('getOrCreateRoom');
-	Route::get('/chat/translations', [SupportChatController::class, 'getTranslations']);
+    Route::get('supportchat', fn (Request $request) => $request->user())->name('supportchat');
+    Route::post('/chat/rooms', [SupportChatController::class, 'createRoom']);
+    Route::post('/chat/rooms/{room}/join', [SupportChatController::class, 'joinRoom']);
+    Route::post('/chat/rooms/{room}/leave', [SupportChatController::class, 'leaveRoom']);
+    Route::post('/chat/rooms/{room}/messages', [SupportChatController::class, 'sendMessage']);
+    Route::get('/chat/rooms/{room}/messages', [SupportChatController::class, 'getMessages']);
+    Route::get('/chat/room', [SupportChatController::class, 'getOrCreateRoom'])->name('getOrCreateRoom');
+    Route::get('/chat/translations', [SupportChatController::class, 'getTranslations']);
 });

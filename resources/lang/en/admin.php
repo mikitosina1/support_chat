@@ -1,5 +1,5 @@
 <?php
 
 return [
-	'config_chat' => 'Configure',
+    'config_chat' => 'Configure',
 ];
