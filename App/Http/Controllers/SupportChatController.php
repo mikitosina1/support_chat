@@ -3,53 +3,50 @@
 namespace Modules\SupportChat\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Modules\SupportChat\App\Events\NewMessage;
+use Modules\SupportChat\App\Actions\Admin\ListRoomMessagesAction;
+use Modules\SupportChat\App\Actions\Admin\ListRoomsAction;
 use Modules\SupportChat\App\Http\Resources\MessageResource;
 use Modules\SupportChat\App\Models\ChatMessage;
 use Modules\SupportChat\App\Models\ChatRoom;
-use Modules\SupportChat\Services\SupportChatService;
 
 class SupportChatController extends Controller
 {
-    protected SupportChatService $supportChatService;
-
-    public function __construct(SupportChatService $supportChatService)
+    /**
+     * Display a listing of chat rooms.
+     *
+     * @param  ListRoomsAction  $action  class with logic
+     * @return View supportchat::supportchat_index with rooms and admin Attributes
+     */
+    public function index(ListRoomsAction $action): View
     {
-        $this->supportChatService = $supportChatService;
+        return view('supportchat::supportchat_index', [
+            'adminAttr' => auth()->user()->only(['id', 'name', 'lastname', 'email', 'profile_photo']),
+            'chatRooms' => $action->execute(),
+        ]);
     }
 
     /**
-     * Display a listing of the resource.
+     * Display selected chat room.
+     *
+     * @param  ChatRoom  $room  selected chat room
+     * @param  ListRoomMessagesAction  $action  class with logic
+     * @return View supportchat::room_show with messages and admin attributes
      */
-    public function index(): Factory|View|Application|RedirectResponse
+    public function show(ChatRoom $room, ListRoomMessagesAction $action): View
     {
-        $isActive = $this->supportChatService->isModuleActive();
-        $user = auth()->user();
-
-        if (! $isActive && ! $user->isAdmin()) {
-            return response()->redirectTo('/');
-        }
-
-        $adminAttr = $user->only([
-            'id',
-            'name',
-            'lastname',
-            'email',
-            'profile_photo',
+        return view('supportchat::room_show', [
+            'room' => $room,
+            'adminAttr' => auth()->user()->only(['id', 'name', 'lastname', 'email', 'profile_photo']),
+            'messages' => MessageResource::collection($action->execute($room))->resolve(),
         ]);
-
-        $rooms = new ChatRoom;
-        $chatRooms = $rooms->getAllRooms();
-
-        return view('supportchat::supportchat_index', compact('adminAttr', 'chatRooms'));
     }
 
+    /**
+     * @TODO replace
+     */
     public function createRoom(Request $request): JsonResponse
     {
         $request->validate([
@@ -68,6 +65,9 @@ class SupportChatController extends Controller
         ]);
     }
 
+    /**
+     * @TODO replace
+     */
     public function joinRoom(ChatRoom $room): JsonResponse
     {
         if (auth()->check()) {
@@ -79,6 +79,9 @@ class SupportChatController extends Controller
         ]);
     }
 
+    /**
+     * @TODO replace
+     */
     public function leaveRoom(ChatRoom $room): JsonResponse
     {
         if (auth()->check()) {
@@ -90,29 +93,9 @@ class SupportChatController extends Controller
         ]);
     }
 
-    public function show(ChatRoom $room): View|Factory|Application
-    {
-        $user = auth()->user();
-        $adminAttr = $user->only([
-            'id',
-            'name',
-            'lastname',
-            'email',
-            'profile_photo',
-        ]);
-        $messages = MessageResource::collection(
-            $room->messages()
-                ->with(['user.role'])
-                /** TODO: think, how much messages to show if i use ajax */
-//					->latest()
-//					->take(50)
-                ->get()
-                ->values()
-        )->resolve();
-
-        return view('supportchat::room_show', compact('room', 'adminAttr', 'messages'));
-    }
-
+    /**
+     * @TODO replace
+     */
     public function sendMessage(Request $request, ChatRoom $room): JsonResponse
     {
         $request->validate([
@@ -136,6 +119,9 @@ class SupportChatController extends Controller
         ]);
     }
 
+    /**
+     * @TODO replace
+     */
     public function getMessages(ChatRoom $room): JsonResponse
     {
         $afterId = request()->integer('after_id');
@@ -157,6 +143,9 @@ class SupportChatController extends Controller
         ]);
     }
 
+    /**
+     * @TODO replace
+     */
     public function getOrCreateRoom(Request $request): JsonResponse
     {
         // for authorized
@@ -197,6 +186,9 @@ class SupportChatController extends Controller
         ]);
     }
 
+    /**
+     * @TODO replace
+     */
     public function getTranslations(Request $request): JsonResponse
     {
         $locale = $request->header('Accept-Language') ?? app()->getLocale();

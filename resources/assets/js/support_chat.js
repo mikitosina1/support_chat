@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 import $ from 'jquery';
 
 window.$ = $;
@@ -20,7 +20,7 @@ function __(key, fallback) {
 async function loadTranslations(chatToken) {
 	try {
 		const response = await $.ajax({
-			url: '/api/v1/chat/translations',
+			url: '/api/v1/support-chat/translations',
 			method: 'GET',
 			headers: {
 				'Authorization': `Bearer ${chatToken}`
@@ -37,11 +37,14 @@ async function loadTranslations(chatToken) {
 	}
 }
 
-async function getUserInfo() {
+async function getUserInfo(chatToken) {
 	try {
 		return await $.ajax({
-			url: '/get-user-info',
-			method: 'GET'
+			url: '/api/v1/support-chat/session',
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${chatToken}`
+			}
 		});
 	} catch (error) {
 		console.error(__('user_info_error', 'Error receiving user information: '), error);
@@ -57,7 +60,7 @@ async function initializeRoom(chatToken) {
 
 	try {
 		const response = await $.ajax({
-			url: '/api/v1/chat/room',
+			url: '/api/v1/support-chat/room',
 			method: 'GET',
 			headers: {
 				'Authorization': `Bearer ${chatToken}`
@@ -85,7 +88,7 @@ async function loadChatHistory(roomId, chatToken) {
 
 	try {
 		const response = await $.ajax({
-			url: `/api/v1/chat/rooms/${roomId}/messages`,
+			url: `/api/v1/support-chat/rooms/${roomId}/messages`,
 			method: 'GET',
 			headers: {
 				'Authorization': `Bearer ${chatToken}`
@@ -124,7 +127,7 @@ async function loadChatHistory(roomId, chatToken) {
 async function sendMessage(roomId, message, chatToken, csrfToken) {
 	try {
 		return await $.ajax({
-			url: `/api/v1/chat/rooms/${roomId}/messages`,
+			url: `/api/v1/support-chat/rooms/${roomId}/messages`,
 			method: 'POST',
 			data: {
 				message: message,
@@ -194,14 +197,14 @@ async function initializeChat() {
 		const iconUp = $(".visibility .icon-up");
 		const iconClose = $(".visibility .icon-close");
 
-		if (chatToken === '' || chatToken === undefined) {
-			$("#chat-footer").html(`<div class="auth-warning dark:text-gray-300">${__('auth_required', 'You must be logged in to send messages.')}</div>`);
-			$('.chat-message.support-message').hide();
-			return;
-		}
+		// if (chatToken === '' || chatToken === undefined) {
+		// 	$("#chat-footer").html(`<div class="auth-warning dark:text-gray-300">${__('auth_required', 'You must be logged in to send messages.')}</div>`);
+		// 	$('.chat-message.support-message').hide();
+		// 	return;
+		// }
 		await loadTranslations(chatToken);
 
-		const userInfo = await getUserInfo();
+		const userInfo = await getUserInfo(chatToken);
 
 		try {
 			const roomId = await initializeRoom(chatToken);
@@ -226,6 +229,7 @@ async function initializeChat() {
 		}
 
 		closeBtn.click(function () {
+            console.log('AAAAAAAAAAA');
 			if (supportChat.hasClass('closed')) {
 				supportChat.removeClass('closed');
 				supportChatBtn.removeClass('open-btn');
@@ -244,6 +248,7 @@ async function initializeChat() {
 		});
 
 		expandBtn.on('click', function () {
+            console.log('AAAAAAAAAAA');
 			supportChat.toggleClass('fullscreen');
 
 			if (supportChat.hasClass('fullscreen')) {
@@ -404,3 +409,5 @@ $(document).ready(function () {
 	pollNew();
 	setInterval(pollNew, 12000);
 })();
+
+

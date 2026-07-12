@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\SupportChat\App\Http\Controllers\Api\V1\User\SessionController;
 use Modules\SupportChat\App\Http\Controllers\SupportChatController;
 
 /*
@@ -15,13 +15,42 @@ use Modules\SupportChat\App\Http\Controllers\SupportChatController;
     |
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->name('api.')->group(function () {
-    Route::get('supportchat', fn (Request $request) => $request->user())->name('supportchat');
-    Route::post('/chat/rooms', [SupportChatController::class, 'createRoom']);
-    Route::post('/chat/rooms/{room}/join', [SupportChatController::class, 'joinRoom']);
-    Route::post('/chat/rooms/{room}/leave', [SupportChatController::class, 'leaveRoom']);
-    Route::post('/chat/rooms/{room}/messages', [SupportChatController::class, 'sendMessage']);
-    Route::get('/chat/rooms/{room}/messages', [SupportChatController::class, 'getMessages']);
-    Route::get('/chat/room', [SupportChatController::class, 'getOrCreateRoom'])->name('getOrCreateRoom');
-    Route::get('/chat/translations', [SupportChatController::class, 'getTranslations']);
-});
+Route::prefix('v1/support-chat')
+    ->middleware('auth:sanctum')
+    ->name('api.v1.support-chat.')
+    ->group(function () {
+        Route::get('/session', SessionController::class)
+            ->name('session.show');
+
+        Route::get('/room', [SupportChatController::class, 'getOrCreateRoom'])
+            ->name('room.show-or-create');
+
+        Route::post('/rooms', [SupportChatController::class, 'createRoom'])
+            ->name('rooms.store');
+
+        Route::post('/rooms/{room}/join', [SupportChatController::class, 'joinRoom'])
+            ->name('rooms.join');
+
+        Route::post('/rooms/{room}/leave', [SupportChatController::class, 'leaveRoom'])
+            ->name('rooms.leave');
+
+        Route::get('/rooms/{room}/messages', [SupportChatController::class, 'getMessages'])
+            ->name('rooms.messages.index');
+
+        Route::post('/rooms/{room}/messages', [SupportChatController::class, 'sendMessage'])
+            ->name('rooms.messages.store');
+
+        Route::get('/translations', [SupportChatController::class, 'getTranslations'])
+            ->name('translations.index');
+    });
+
+Route::prefix('v1/admin/support-chat')
+    ->middleware(['auth:sanctum', 'is_admin'])
+    ->name('api.v1.admin.support-chat.')
+    ->group(function () {
+        Route::get('/rooms/{room}/messages', [SupportChatController::class, 'getMessages'])
+            ->name('rooms.messages.index');
+
+        Route::post('/rooms/{room}/messages', [SupportChatController::class, 'sendMessage'])
+            ->name('rooms.messages.store');
+    });
