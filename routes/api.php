@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\SupportChat\App\Http\Controllers\Api\V1\Admin\AdminRoomController;
 use Modules\SupportChat\App\Http\Controllers\Api\V1\Admin\MessageController as AdminMessageController;
 use Modules\SupportChat\App\Http\Controllers\Api\V1\User\MessageController;
 use Modules\SupportChat\App\Http\Controllers\Api\V1\User\RoomController;
@@ -22,20 +23,16 @@ Route::prefix('v1/support-chat')
     ->middleware('auth:sanctum')
     ->name('api.v1.support-chat.')
     ->group(function () {
-        Route::get('/session', SessionController::class)
-            ->name('session.show');
+        Route::get('/session', SessionController::class)->name('session.show');
 
-        Route::get('/room', [RoomController::class, 'getOrCreate'])
-            ->name('room.show-or-create');
+        Route::get('/rooms/current', [RoomController::class, 'current'])
+            ->name('rooms.current');
 
         Route::post('/rooms', [RoomController::class, 'store'])
             ->name('rooms.store');
 
-        Route::post('/rooms/{room}/join', [RoomController::class, 'join'])
-            ->name('rooms.join');
-
-        Route::post('/rooms/{room}/leave', [RoomController::class, 'leave'])
-            ->name('rooms.leave');
+        Route::patch('/rooms/{room}/resolve', [RoomController::class, 'resolve'])
+            ->name('rooms.resolve');
 
         Route::get('/rooms/{room}/messages', [MessageController::class, 'index'])
             ->name('rooms.messages.index');
@@ -43,7 +40,7 @@ Route::prefix('v1/support-chat')
         Route::post('/rooms/{room}/messages', [MessageController::class, 'store'])
             ->name('rooms.messages.store');
 
-        Route::get('/translations', [TranslationController::class, 'getTranslations'])
+        Route::get('/translations', TranslationController::class)
             ->name('translations.index');
     });
 
@@ -51,6 +48,15 @@ Route::prefix('v1/admin/support-chat')
     ->middleware(['auth:sanctum', 'is_admin'])
     ->name('api.v1.admin.support-chat.')
     ->group(function () {
+        Route::get('/rooms', [AdminRoomController::class, 'index'])
+            ->name('rooms.index');
+
+        Route::get('/rooms/{room}', [AdminRoomController::class, 'show'])
+            ->name('rooms.show');
+
+        Route::patch('/rooms/{room}/close', [AdminRoomController::class, 'close'])
+            ->name('rooms.close');
+
         Route::get('/rooms/{room}/messages', [AdminMessageController::class, 'index'])
             ->name('rooms.messages.index');
 
