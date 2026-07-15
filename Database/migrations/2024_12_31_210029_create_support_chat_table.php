@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('chat_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->enum('status', ['open', 'closed'])->default('open');
+            $table->enum('status', ['open', 'resolved', 'closed'])->default('open');
             $table->timestamps();
         });
 

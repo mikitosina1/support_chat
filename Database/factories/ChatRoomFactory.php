@@ -13,7 +13,7 @@ class ChatRoomFactory extends Factory
     {
         return [
             'name' => $this->faker->words(3, true),
-            'status' => $this->faker->randomElement(['open', 'closed']),
+            'status' => $this->faker->randomElement(['open', 'resolved', 'closed']),
         ];
     }
 }
