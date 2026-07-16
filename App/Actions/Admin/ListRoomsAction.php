@@ -2,6 +2,7 @@
 
 namespace Modules\SupportChat\App\Actions\Admin;
 
+use Illuminate\Support\Collection;
 use Modules\SupportChat\App\Repositories\ChatRoomRepository;
 
 class ListRoomsAction
@@ -10,7 +11,7 @@ class ListRoomsAction
         private readonly ChatRoomRepository $rooms,
     ) {}
 
-    public function execute(): array
+    public function execute(): Collection
     {
         return $this->rooms->allForAdmin();
     }
