@@ -26,6 +26,13 @@ class ChatRoomPolicy
         return $this->isParticipant($user, $room);
     }
 
+    protected function isParticipant(User $user, ChatRoom $room): bool
+    {
+        return $room->users()
+            ->whereKey($user->id)
+            ->exists();
+    }
+
     public function create(User $user): bool
     {
         return true;
@@ -45,12 +52,5 @@ class ChatRoomPolicy
     {
         return $room->isOpen()
             && $this->isParticipant($user, $room);
-    }
-
-    protected function isParticipant(User $user, ChatRoom $room): bool
-    {
-        return $room->users()
-            ->whereKey($user->id)
-            ->exists();
     }
 }

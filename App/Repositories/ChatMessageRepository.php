@@ -52,6 +52,16 @@ class ChatMessageRepository
         return $message->load(['user.role']);
     }
 
+    public function markIncomingAsDelivered(ChatRoom $room, User $reader): int
+    {
+        return $room->messages()
+            ->where('user_id', '!=', $reader->id)
+            ->whereIn('status', [
+                ChatMessageStatus::Sent,
+            ])
+            ->update(['status' => ChatMessageStatus::Delivered]);
+    }
+
     public function markIncomingAsRead(ChatRoom $room, User $reader): int
     {
         return $room->messages()

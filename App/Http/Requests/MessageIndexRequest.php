@@ -20,6 +20,9 @@ class MessageIndexRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return MessageIndexData
+     */
     public function toData(): MessageIndexData
     {
         return MessageIndexData::fromArray($this->validated());

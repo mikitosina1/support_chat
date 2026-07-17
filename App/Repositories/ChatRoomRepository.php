@@ -31,6 +31,12 @@ class ChatRoomRepository
             ->findOrFail($roomId);
     }
 
+    public function getOrCreateOpenForUser(User $user): ChatRoom
+    {
+        return $this->findOpenForUser($user)
+            ?? $this->createForUser($user);
+    }
+
     public function findOpenForUser(User $user): ?ChatRoom
     {
         return ChatRoom::query()
@@ -38,12 +44,6 @@ class ChatRoomRepository
             ->whereHas('users', fn ($query) => $query->whereKey($user->id))
             ->latest('updated_at')
             ->first();
-    }
-
-    public function getOrCreateOpenForUser(User $user): ChatRoom
-    {
-        return $this->findOpenForUser($user)
-            ?? $this->createForUser($user);
     }
 
     public function createForUser(User $user, ?CreateRoomData $data = null): ChatRoom
@@ -56,6 +56,17 @@ class ChatRoomRepository
         $room->users()->syncWithoutDetaching([$user->id]);
 
         return $room->load('users');
+    }
+
+    public function resolve(ChatRoom $room, User $user): ChatRoom
+    {
+        $room = $this->findForUserOrFail($room->id, $user);
+
+        $room->update([
+            'status' => ChatRoomStatus::Resolved,
+        ]);
+
+        return $room->refresh();
     }
 
     public function findForUserOrFail(int $roomId, User $user): ChatRoom
@@ -71,17 +82,6 @@ class ChatRoomRepository
         }
 
         return $room;
-    }
-
-    public function resolve(ChatRoom $room, User $user): ChatRoom
-    {
-        $room = $this->findForUserOrFail($room->id, $user);
-
-        $room->update([
-            'status' => ChatRoomStatus::Resolved,
-        ]);
-
-        return $room->refresh();
     }
 
     public function close(ChatRoom $room): ChatRoom

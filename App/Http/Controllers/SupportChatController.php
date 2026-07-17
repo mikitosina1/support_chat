@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Modules\SupportChat\App\Actions\Admin\ListRoomMessagesAction;
 use Modules\SupportChat\App\Actions\Admin\ListRoomsAction;
+use Modules\SupportChat\App\Data\MessageIndexData;
 use Modules\SupportChat\App\Http\Resources\MessageResource;
 use Modules\SupportChat\App\Models\ChatRoom;
 
@@ -32,12 +33,15 @@ class SupportChatController extends Controller
      * @param  ListRoomMessagesAction  $action  class with logic
      * @return View supportchat::room_show with messages and admin attributes
      */
-    public function show(ChatRoom $room, ListRoomMessagesAction $action): View
-    {
+    public function show(
+        ChatRoom $room,
+        ListRoomMessagesAction $action,
+        MessageIndexData $data
+    ): View {
         return view('supportchat::room_show', [
             'room' => $room,
             'adminAttr' => auth()->user()->only(['id', 'name', 'lastname', 'email', 'profile_photo']),
-            'messages' => MessageResource::collection($action->execute($room))->resolve(),
+            'messages' => MessageResource::collection($action->execute($room, $data))->resolve(),
         ]);
     }
 }

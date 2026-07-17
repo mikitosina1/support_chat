@@ -6,7 +6,7 @@ use App\Models\User;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\App\Repositories\ChatMessageRepository;
 
-class MarkRoomMessagesAsReadAction
+class MarkMessagesAsDeliveredAction
 {
     public function __construct(
         private readonly ChatMessageRepository $messages,
@@ -14,6 +14,6 @@ class MarkRoomMessagesAsReadAction
 
     public function execute(ChatRoom $room, User $reader): int
     {
-        return $this->messages->markIncomingAsRead($room, $reader);
+        return $this->messages->markIncomingAsDelivered($room, $reader);
     }
 }

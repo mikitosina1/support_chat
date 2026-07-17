@@ -37,6 +37,8 @@ class ChatRoom extends Model
 
     /**
      * Redefinition for class factory
+     *
+     * @return ChatRoomFactory
      */
     protected static function newFactory(): ChatRoomFactory
     {
