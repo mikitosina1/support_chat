@@ -60,7 +60,7 @@ async function initializeRoom(chatToken) {
 
     try {
         const response = await $.ajax({
-            url: '/api/v1/support-chat/room',
+            url: '/api/v1/support-chat/rooms/current',
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${chatToken}`
