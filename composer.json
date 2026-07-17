@@ -1,42 +1,42 @@
 {
-	"name": "mikitosina1/supportchat",
-	"description": "Simple support chat widget with admin and user UI",
-	"authors": [
-		{
-			"name": "Mykyta Zarichnyi",
-			"email": "mikitosina27@gmail.com"
-		}
-	],
-	"keywords": [
-		"laravel",
-		"module",
-		"support chat",
-		"mikitosina1",
-		"SupportChat"
-	],
-	"extra": {
-		"laravel": {
-			"providers": [],
-			"aliases": {}
-		}
-	},
-	"require": {
-		"php": "^8.1",
-		"laravel/framework": "^10.10",
-		"laravel/ui": "^4.5",
-		"nwidart/laravel-modules": "^10.0"
-	},
-	"repositories": [],
-	"autoload": {
-		"psr-4": {
-			"Modules\\SupportChat\\": "../../Modules/SupportChat",
-			"Database\\Migrations\\": "./Database/migrations/",
-			"Database\\Seeders\\": "./Database/Seeders/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Modules\\SupportChat\\Tests\\": "../../Modules/SupportChat/tests/"
-		}
-	}
+    "name": "mikitosina1/supportchat",
+    "description": "Simple support chat widget with admin and user UI",
+    "authors": [
+        {
+            "name": "Mykyta Zarichnyi",
+            "email": "mikitosina27@gmail.com"
+        }
+    ],
+    "keywords": [
+        "laravel",
+        "module",
+        "support chat",
+        "mikitosina1",
+        "SupportChat"
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "laravel/framework": "^10.10",
+        "laravel/ui": "^4.5",
+        "nwidart/laravel-modules": "^10.0"
+    },
+    "repositories": [],
+    "autoload": {
+        "psr-4": {
+            "Modules\\SupportChat\\": "../../Modules/SupportChat",
+            "Database\\Migrations\\": "./Database/migrations/",
+            "Database\\Seeders\\": "./Database/Seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\SupportChat\\Tests\\": "../../Modules/SupportChat/tests/"
+        }
+    }
 }
