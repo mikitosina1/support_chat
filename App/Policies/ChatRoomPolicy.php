@@ -43,7 +43,7 @@ class ChatRoomPolicy
 
     public function sendMessage(User $user, ChatRoom $room): bool
     {
-        return $room->status === 'open'
+        return $room->isOpen()
             && $this->isParticipant($user, $room);
     }
 
