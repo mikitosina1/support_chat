@@ -16,7 +16,6 @@ class ChatRoomResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'success' => true,
             'room' => [
                 'id' => $this->id,
                 'name' => $this->name,

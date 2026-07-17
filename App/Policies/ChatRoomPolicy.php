@@ -31,14 +31,14 @@ class ChatRoomPolicy
         return true;
     }
 
-    public function join(User $user, ChatRoom $room): bool
+    public function resolve(User $user, ChatRoom $room): bool
     {
-        return false;
+        return $room->isOpen() && $this->isParticipant($user, $room);
     }
 
-    public function leave(User $user, ChatRoom $room): bool
+    public function close(User $user, ChatRoom $room): bool
     {
-        return $this->isParticipant($user, $room);
+        return $user->isAdmin() && ! $room->isClosed();
     }
 
     public function sendMessage(User $user, ChatRoom $room): bool

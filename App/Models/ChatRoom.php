@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Modules\SupportChat\App\Enums\ChatRoomStatus;
 use Modules\SupportChat\Database\factories\ChatRoomFactory;
 
 /**
@@ -17,7 +18,7 @@ use Modules\SupportChat\Database\factories\ChatRoomFactory;
  *
  * @property int $id basic user id
  * @property string $name chat room title
- * @property string $status chat room status
+ * @property ChatRoomStatus $status chat room status
  * @property Carbon $created_at when created
  * @property Carbon $updated_at when created
  */
@@ -25,19 +26,13 @@ class ChatRoom extends Model
 {
     use HasFactory;
 
-    const STATUS_OPEN = 'open';
-
-    const STATUS_CLOSED = 'closed';
-
-    const STATUS_RESOLVED = 'resolved';
-
     protected $fillable = [
         'name',
         'status',
     ];
 
     protected $casts = [
-        'status' => 'string',
+        'status' => ChatRoomStatus::class,
     ];
 
     /**
@@ -61,16 +56,16 @@ class ChatRoom extends Model
 
     public function isOpen(): bool
     {
-        return $this->status === self::STATUS_OPEN;
+        return $this->status === ChatRoomStatus::Open;
     }
 
     public function isResolved(): bool
     {
-        return $this->status === self::STATUS_RESOLVED;
+        return $this->status === ChatRoomStatus::Resolved;
     }
 
     public function isClosed(): bool
     {
-        return $this->status === self::STATUS_CLOSED;
+        return $this->status === ChatRoomStatus::Closed;
     }
 }

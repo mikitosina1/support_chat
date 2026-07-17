@@ -32,6 +32,7 @@ class RoomController extends Controller
         StoreRoomRequest $request,
         CreateRoomAction $action,
     ): ChatRoomResource {
+        $this->authorize('create', ChatRoom::class);
 
         return new ChatRoomResource(
             $action->execute($request->toData(), auth()->user())
@@ -47,6 +48,7 @@ class RoomController extends Controller
         ChatRoom $room,
         ResolveRoomAction $action
     ): ChatRoomResource {
+        $this->authorize('resolve', $room);
 
         return new ChatRoomResource(
             $action->execute($room, auth()->user())

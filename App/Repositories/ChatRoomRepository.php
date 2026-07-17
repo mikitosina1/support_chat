@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\SupportChat\App\Data\CreateRoomData;
+use Modules\SupportChat\App\Enums\ChatRoomStatus;
 use Modules\SupportChat\App\Models\ChatRoom;
 
 class ChatRoomRepository
@@ -33,7 +34,7 @@ class ChatRoomRepository
     public function findOpenForUser(User $user): ?ChatRoom
     {
         return ChatRoom::query()
-            ->where('status', ChatRoom::STATUS_OPEN)
+            ->where('status', ChatRoomStatus::Open)
             ->whereHas('users', fn ($query) => $query->whereKey($user->id))
             ->latest('updated_at')
             ->first();
@@ -49,7 +50,7 @@ class ChatRoomRepository
     {
         $room = ChatRoom::query()->create([
             'name' => $data?->name ?? 'Support chat #'.$user->id,
-            'status' => ChatRoom::STATUS_OPEN,
+            'status' => ChatRoomStatus::Open,
         ]);
 
         $room->users()->syncWithoutDetaching([$user->id]);
@@ -77,7 +78,7 @@ class ChatRoomRepository
         $room = $this->findForUserOrFail($room->id, $user);
 
         $room->update([
-            'status' => $room::STATUS_RESOLVED,
+            'status' => ChatRoomStatus::Resolved,
         ]);
 
         return $room->refresh();
@@ -85,8 +86,8 @@ class ChatRoomRepository
 
     public function close(ChatRoom $room): ChatRoom
     {
-        $room->forceFill([
-            'status' => ChatRoom::STATUS_CLOSED,
+        $room->fill([
+            'status' => ChatRoomStatus::Closed,
         ])->save();
 
         return $room->refresh();
@@ -94,8 +95,8 @@ class ChatRoomRepository
 
     public function reopen(ChatRoom $room): ChatRoom
     {
-        $room->forceFill([
-            'status' => ChatRoom::STATUS_OPEN,
+        $room->fill([
+            'status' => ChatRoomStatus::Open,
         ])->save();
 
         return $room->refresh();

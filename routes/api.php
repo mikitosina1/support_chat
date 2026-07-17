@@ -40,6 +40,9 @@ Route::prefix('v1/support-chat')
         Route::post('/rooms/{room}/messages', [MessageController::class, 'store'])
             ->name('rooms.messages.store');
 
+        Route::patch('/rooms/{room}/messages/read', [MessageController::class, 'markRead'])
+            ->name('rooms.messages.read');
+
         Route::get('/translations', TranslationController::class)
             ->name('translations.index');
     });

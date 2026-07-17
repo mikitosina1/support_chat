@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Modules\SupportChat\App\Enums\ChatMessageStatus;
 use Modules\SupportChat\Database\factories\ChatMessageFactory;
 
 /**
@@ -18,7 +19,7 @@ use Modules\SupportChat\Database\factories\ChatMessageFactory;
  * @property int $chat_room_id chat room id
  * @property int $user_id user id
  * @property string $message message text
- * @property string $status status of a message
+ * @property ChatMessageStatus $status status of a message
  * @property Carbon $created_at when created
  * @property Carbon $updated_at when created
  */
@@ -34,10 +35,8 @@ class ChatMessage extends Model
     ];
 
     protected $casts = [
-        'status' => 'string',
+        'status' => ChatMessageStatus::class,
     ];
-
-    private mixed $chat_room_id;
 
     /**
      * redefinition for class factory
