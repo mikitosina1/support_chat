@@ -22,7 +22,6 @@ class StoreRoomRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'status' => 'required|in:open,resolved,closed',
         ];
     }
 

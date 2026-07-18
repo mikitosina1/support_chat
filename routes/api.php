@@ -66,6 +66,12 @@ Route::prefix('v1/admin/support-chat')
         Route::get('/rooms/{room}/messages', [AdminMessageController::class, 'index'])
             ->name('rooms.messages.index');
 
+        Route::patch('/rooms/{room}/messages/delivered', [AdminMessageController::class, 'markDelivered'])
+            ->name('rooms.messages.delivered');
+
+        Route::patch('/rooms/{room}/messages/read', [AdminMessageController::class, 'markRead'])
+            ->name('rooms.messages.read');
+
         Route::post('/rooms/{room}/messages', [AdminMessageController::class, 'store'])
             ->name('rooms.messages.store');
     });

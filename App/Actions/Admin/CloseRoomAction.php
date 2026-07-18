@@ -2,6 +2,7 @@
 
 namespace Modules\SupportChat\App\Actions\Admin;
 
+use Modules\SupportChat\App\Events\RoomClosed;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\App\Repositories\ChatRoomRepository;
 
@@ -13,6 +14,10 @@ class CloseRoomAction
 
     public function execute(ChatRoom $room): ChatRoom
     {
-        return $this->rooms->close($room);
+        $room = $this->rooms->close($room);
+
+        RoomClosed::dispatch($room);
+
+        return $room;
     }
 }

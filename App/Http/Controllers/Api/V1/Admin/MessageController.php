@@ -3,9 +3,12 @@
 namespace Modules\SupportChat\App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\SupportChat\App\Actions\Admin\ListRoomMessagesAction;
 use Modules\SupportChat\App\Actions\Admin\SendMessageAction;
+use Modules\SupportChat\App\Actions\MarkMessagesAsDeliveredAction;
+use Modules\SupportChat\App\Actions\MarkMessagesAsReadAction;
 use Modules\SupportChat\App\Http\Requests\MessageIndexRequest;
 use Modules\SupportChat\App\Http\Requests\StoreMessageRequest;
 use Modules\SupportChat\App\Http\Resources\MessageResource;
@@ -35,5 +38,41 @@ class MessageController extends Controller
         return new MessageResource(
             $action->execute($room, auth()->user(), $request->toData())
         );
+    }
+
+    /**
+     * @param ChatRoom $room
+     * @param MarkMessagesAsDeliveredAction $action
+     * @return JsonResponse
+     */
+    public function markDelivered(
+        ChatRoom $room,
+        MarkMessagesAsDeliveredAction $action,
+    ): JsonResponse {
+        $this->authorize('view', $room);
+
+        $updated = $action->execute($room, auth()->user());
+
+        return response()->json([
+            'updated' => $updated,
+        ]);
+    }
+
+    /**
+     * @param ChatRoom $room
+     * @param MarkMessagesAsReadAction $action
+     * @return JsonResponse
+     */
+    public function markRead(
+        ChatRoom $room,
+        MarkMessagesAsReadAction $action
+    ): JsonResponse {
+        $this->authorize('view', $room);
+
+        $updated = $action->execute($room, auth()->user());
+
+        return response()->json([
+            'updated' => $updated,
+        ]);
     }
 }

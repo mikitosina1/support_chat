@@ -3,6 +3,7 @@
 namespace Modules\SupportChat\App\Actions;
 
 use App\Models\User;
+use Modules\SupportChat\App\Events\MessagesDelivered;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\App\Repositories\ChatMessageRepository;
 
@@ -14,6 +15,12 @@ class MarkMessagesAsDeliveredAction
 
     public function execute(ChatRoom $room, User $reader): int
     {
-        return $this->messages->markIncomingAsDelivered($room, $reader);
+        $updated = $this->messages->markIncomingAsDelivered($room, $reader);
+
+        if ($updated > 0) {
+            MessagesDelivered::dispatch($room, $reader, $updated);
+        }
+
+        return $updated;
     }
 }

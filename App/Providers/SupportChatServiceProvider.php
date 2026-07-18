@@ -4,9 +4,12 @@ namespace Modules\SupportChat\App\Providers;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Modules\ModuleManager\App\Services\ModuleAdminActionRegistrar;
+use Modules\SupportChat\App\Models\ChatRoom;
+use Modules\SupportChat\App\Policies\ChatRoomPolicy;
 use Modules\SupportChat\App\View\Components\SupportChat;
 use Modules\SupportChat\Services\SupportChatService;
 
@@ -28,6 +31,8 @@ class SupportChatServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/migrations'));
         $this->loadViewsFrom(__DIR__.'/../../resources/views', $this->moduleNameLower);
+
+        Gate::policy(ChatRoom::class, ChatRoomPolicy::class);
 
         if ($this->app->make(SupportChatService::class)->isModuleActive()) {
             Blade::component($this->moduleNameLower, SupportChat::class);
