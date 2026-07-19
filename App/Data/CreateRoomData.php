@@ -11,12 +11,10 @@ class CreateRoomData
 {
     /**
      * @param string $name
-     * @param  string $status
      * @return void
      */
     public function __construct(
         public readonly string $name,
-        public readonly string $status,
     ) {}
 
     /**
@@ -32,7 +30,6 @@ class CreateRoomData
     {
         return new self(
             name: $data['name'],
-            status: $data['status'],
         );
     }
 
@@ -48,7 +45,6 @@ class CreateRoomData
     {
         return [
             'name' => $this->name,
-            'status' => $this->status,
         ];
     }
 }
