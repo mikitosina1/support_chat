@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\SupportChat\Database\factories;
+namespace Modules\SupportChat\Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
