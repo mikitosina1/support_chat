@@ -80,7 +80,7 @@ class MessageControllerTest extends SupportChatTest
         $admin = $this->actingAsAdmin();
         $adminMessage = $this->createChatMessage($room->id, $admin->id);
 
-        $response = $this->patchJson(self::BASE_URL."/rooms/{$room->id}/messages/delivered");
+        $response = $this->patchJson(self::ADMIN_BASE_URL."/rooms/{$room->id}/messages/delivered");
 
         $response->assertOk();
 
@@ -107,7 +107,7 @@ class MessageControllerTest extends SupportChatTest
         $admin = $this->actingAsAdmin();
         $adminMessage = $this->createChatMessage($room->id, $admin->id);
 
-        $response = $this->patchJson(self::BASE_URL."/rooms/{$room->id}/messages/read");
+        $response = $this->patchJson(self::ADMIN_BASE_URL."/rooms/{$room->id}/messages/read");
 
         $response->assertOk();
 
