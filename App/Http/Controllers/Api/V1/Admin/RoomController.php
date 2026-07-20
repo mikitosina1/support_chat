@@ -10,7 +10,7 @@ use Modules\SupportChat\App\Actions\Admin\ShowRoomAction;
 use Modules\SupportChat\App\Http\Resources\ChatRoomResource;
 use Modules\SupportChat\App\Models\ChatRoom;
 
-class AdminRoomController extends Controller
+class RoomController extends Controller
 {
     public function index(ListRoomsAction $action): AnonymousResourceCollection
     {
