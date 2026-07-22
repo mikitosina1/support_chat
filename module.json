@@ -15,5 +15,12 @@
         "Modules\\SupportChat\\App\\Providers\\SupportChatServiceProvider"
     ],
     "files": [],
+    "admin_actions": [
+        {
+            "route": "admin.supportchat.index",
+            "label": "supportchat::admin.config_chat",
+            "icon": "💬"
+        }
+    ],
     "version": "0.0.1"
 }

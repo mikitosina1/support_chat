@@ -1,3 +1,8 @@
+@php
+    $supportChatAssets ??= \Nwidart\Modules\Module::getAssets();
+    $supportChatAssets = array_filter($supportChatAssets, fn ($asset) => str_contains($asset, 'Modules/SupportChat'));
+@endphp
+
 @foreach ($supportChatAssets as $asset)
     @vite($asset)
 @endforeach

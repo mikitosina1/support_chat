@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Modules\ModuleManager\App\Services\ModuleAdminActionRegistrar;
 use Modules\SupportChat\App\Models\ChatRoom;
 use Modules\SupportChat\App\Policies\ChatRoomPolicy;
 use Modules\SupportChat\App\View\Components\SupportChat;
@@ -41,15 +40,6 @@ class SupportChatServiceProvider extends ServiceProvider
                 $supportChat = new SupportChat;
                 $view->with('supportChatAssets', $supportChat->getSupportChatAssets());
             });
-
-            ModuleAdminActionRegistrar::register(
-                $this->moduleName,
-                $this->moduleNameLower,
-                'admin.supportchat.index',
-                $this->moduleNameLower.'::admin.config_chat',
-                '💬',
-                fn () => $this->app->make(SupportChatService::class)->isModuleActive()
-            );
         }
     }
 
