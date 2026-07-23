@@ -70,7 +70,7 @@ class RoomControllerTest extends SupportChatTest
         $response = $this->patchJson(self::ADMIN_BASE_URL."/rooms/{$room->id}/close");
 
         $response->assertOk()
-            ->assertJsonPath('data.status', $room->id)
+            ->assertJsonPath('data.status', 'closed')
             ->assertJsonStructure([
                 'data' => [
                     'id',

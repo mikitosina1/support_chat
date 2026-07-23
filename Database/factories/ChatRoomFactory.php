@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\SupportChat\Database\Factories;
+namespace Modules\SupportChat\Database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\SupportChat\App\Models\ChatRoom;
