@@ -15,4 +15,25 @@ final class SupportChatPermissions implements ModulePermissions
             'close_room',
         ];
     }
+
+    public static function defaults(): array
+    {
+        return [
+            config('roles.admin') => [
+                'access' => true,
+                'view' => true,
+                'create' => true,
+                'update' => true,
+                'delete' => true,
+            ],
+
+            config('roles.user') => [
+                'access' => true,
+                'view' => true,
+                'create' => true,
+                'update' => true,
+                'delete' => true,
+            ],
+        ];
+    }
 }
