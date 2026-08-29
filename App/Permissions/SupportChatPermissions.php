@@ -3,6 +3,7 @@
 namespace Modules\SupportChat\App\Permissions;
 
 use App\Contracts\ModulePermissions;
+use App\Models\Role;
 
 final class SupportChatPermissions implements ModulePermissions
 {
@@ -11,7 +12,9 @@ final class SupportChatPermissions implements ModulePermissions
         return [
             'access',
             'view',
+            'create',
             'send_message',
+            'resolve',
             'close_room',
         ];
     }
@@ -19,20 +22,22 @@ final class SupportChatPermissions implements ModulePermissions
     public static function defaults(): array
     {
         return [
-            config('roles.admin') => [
+            Role::ADMIN => [
                 'access' => true,
                 'view' => true,
                 'create' => true,
-                'update' => true,
-                'delete' => true,
+                'send_message' => true,
+                'resolve' => true,
+                'close_room' => true,
             ],
 
-            config('roles.user') => [
+            Role::USER => [
                 'access' => true,
                 'view' => true,
                 'create' => true,
-                'update' => true,
-                'delete' => true,
+                'send_message' => true,
+                'resolve' => true,
+                'close_room' => false,
             ],
         ];
     }

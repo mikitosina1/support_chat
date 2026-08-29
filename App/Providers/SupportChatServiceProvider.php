@@ -2,6 +2,7 @@
 
 namespace Modules\SupportChat\App\Providers;
 
+use App\Services\ModuleSettingsInitializer;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -32,6 +33,9 @@ class SupportChatServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../../resources/views', $this->moduleNameLower);
 
         Gate::policy(ChatRoom::class, ChatRoomPolicy::class);
+
+        $this->app->make(ModuleSettingsInitializer::class)
+            ->initialize($this->moduleName, 'support-chat');
 
         if ($this->app->make(SupportChatService::class)->isModuleActive()) {
             Blade::component($this->moduleNameLower, SupportChat::class);
